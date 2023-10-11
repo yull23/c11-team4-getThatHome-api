@@ -214,7 +214,7 @@ DEPENDENCIES
   devise
   pg (~> 1.1)
   puma (~> 5.0)
-  rails (~> 7.0.8)
+  rails (~> 7.0.4)
   rubocop
   rubocop-rails
   tzinfo-data
