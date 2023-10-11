@@ -10,8 +10,9 @@
       <%=link_to "Sign up", new_user_registration_path%>
 <% end %>
 </p>
-<body>
-
-  <% yield %>
-</body>
+  <body>
+    <%= yield %>
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+  </body>
 </html>
