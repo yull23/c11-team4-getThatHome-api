@@ -7,5 +7,5 @@ class User < ApplicationRecord
   # Validations
   validates :name, presence: true, uniqueness: true, length: { maximum: 16 }
 
-  belongs_to :role_id
+  belongs_to :role
 end
