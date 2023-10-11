@@ -1,6 +1,6 @@
 class CreatePropertYsers < ActiveRecord::Migration[7.0]
   def change
-    create_table :propert_ysers do |t|
+    create_table :property_user do |t|
       t.references :user_id, null: false, foreign_key: true
       t.references :property_id, null: false, foreign_key: true
       t.boolean :favorite
