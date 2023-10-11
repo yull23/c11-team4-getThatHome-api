@@ -3,5 +3,4 @@ class PropertyAddress < ApplicationRecord
 
   # validations
   validates :name, :latitude, :longitude, presence: true
-
 end
