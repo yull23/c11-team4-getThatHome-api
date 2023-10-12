@@ -1,5 +1,5 @@
 class UserProperty < ApplicationRecord
   belongs_to :user
-  belongs_to :property_for_rent_id
-  belongs_to :property_for_sale_id
+  belongs_to :propertyable polymorphic: true
+  
 end
