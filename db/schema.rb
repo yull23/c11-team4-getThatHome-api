@@ -39,9 +39,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_163100) do
 
   create_table "property_for_rents", force: :cascade do |t|
     t.bigint "property_id", null: false
-    t.integer "monthly_rent"
-    t.integer "maintenance"
-    t.boolean "pets_allowed"
+    t.integer "monthly_rent", null: false
+    t.integer "maintenance", null: false
+    t.boolean "pets_allowed", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["property_id"], name: "index_property_for_rents_on_property_id"
@@ -49,7 +49,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_163100) do
 
   create_table "property_for_sales", force: :cascade do |t|
     t.bigint "property_id", null: false
-    t.integer "price"
+    t.integer "price", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["property_id"], name: "index_property_for_sales_on_property_id"
@@ -92,7 +92,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_163100) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "phone"
     t.bigint "role_id", null: false
     t.datetime "created_at", null: false
