@@ -17,12 +17,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_163100) do
   create_table "properties", force: :cascade do |t|
     t.bigint "property_type_id", null: false
     t.bigint "property_address_id", null: false
-    t.integer "bedrooms"
-    t.integer "bathrooms"
+    t.integer "bedrooms", default: 0
+    t.integer "bathrooms", default: 0
     t.integer "area"
     t.text "description"
-    t.string "photo_url"
-    t.boolean "active"
+    t.string "photo_url", default: [], array: true
+    t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["property_address_id"], name: "index_properties_on_property_address_id"
@@ -59,6 +59,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_163100) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_property_types_on_name", unique: true
   end
 
   create_table "property_users", force: :cascade do |t|
