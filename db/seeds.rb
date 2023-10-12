@@ -8,19 +8,20 @@
 Role.create(name: 'admin')
 Role.create(name: 'usuario')
 Role.create(name: 'editor')
-
+puts "End creating roles"
 # Primero, obtén las instancias de los roles
 admin_role = Role.find_by(name: 'admin')
 user_role = Role.find_by(name: 'usuario')
 editor_role = Role.find_by(name: 'editor')
 
 # Crea usuarios con roles
-
+puts "Creating users"
 User.create(name: 'david', email: 'david@example.com', password: 'password1', password_confirmation: 'password1', role: admin_role)
-User.create(name: 'roxana', email: 'roxana@example.com', password: 'password2', password_confirmation: 'password2', role: user_role)
+User.create(name: 'roxana', email: 'roxana@example.com', password: '  ', password_confirmation: 'password2', role: user_role)
 User.create(name: 'yull', email: 'yull@example.com', password: 'password3', password_confirmation: 'password3', role: editor_role)
 
-puts "start creating property types"
+# Property Types
+puts "Creating property types"
 types = [
   {
     name: "Apartment"
