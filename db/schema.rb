@@ -31,8 +31,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_163100) do
 
   create_table "property_addresses", force: :cascade do |t|
     t.string "name"
-    t.bigint "latitude"
-    t.bigint "longitude"
+    t.bigint "latitude", null: false
+    t.bigint "longitude", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -76,6 +76,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_163100) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_roles_on_name", unique: true
   end
 
   create_table "user_properties", force: :cascade do |t|
