@@ -1,5 +1,5 @@
 class PropertyForRent < ApplicationRecord
-  belongs_to :property_id
+  belongs_to :property
   has_one :user_property, dependent: :destroy
 
   # Validations
