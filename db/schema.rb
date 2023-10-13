@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_11_163100) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_13_031749) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -82,19 +82,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_163100) do
 
   create_table "user_properties", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "property_for_rent_id", null: false
-    t.bigint "property_for_sale_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["property_for_rent_id"], name: "index_user_properties_on_property_for_rent_id"
-    t.index ["property_for_sale_id"], name: "index_user_properties_on_property_for_sale_id"
+    t.string "userPropertyable_type", null: false
+    t.bigint "userPropertyable_id", null: false
+    t.index ["userPropertyable_type", "userPropertyable_id"], name: "index_user_properties_on_userPropertyable"
     t.index ["user_id"], name: "index_user_properties_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
     t.string "phone"
-    t.bigint "role_id", null: false
+    t.bigint "role_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", default: "", null: false
@@ -114,8 +113,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_163100) do
   add_foreign_key "property_for_sales", "properties"
   add_foreign_key "property_users", "properties"
   add_foreign_key "property_users", "users"
-  add_foreign_key "user_properties", "property_for_rents"
-  add_foreign_key "user_properties", "property_for_sales"
   add_foreign_key "user_properties", "users"
   add_foreign_key "users", "roles"
 end
