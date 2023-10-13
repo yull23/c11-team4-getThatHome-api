@@ -5,6 +5,11 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+puts "start destroying data ..."
+Role.destroy_all
+User.destroy_all
+PropertyType.destroy_all
+
 Role.create(name: 'admin')
 Role.create(name: 'usuario')
 Role.create(name: 'editor')
@@ -15,9 +20,9 @@ user_role = Role.find_by(name: 'usuario')
 editor_role = Role.find_by(name: 'editor')
 
 # Crea usuarios con roles
-puts "Creating users"
+puts "Creating users with roles"
 User.create(name: 'david', email: 'david@example.com', password: 'password1', password_confirmation: 'password1', role: admin_role)
-User.create(name: 'roxana', email: 'roxana@example.com', password: '  ', password_confirmation: 'password2', role: user_role)
+User.create(name: 'roxana', email: 'roxana@example.com', password: 'password2', password_confirmation: 'password2', role: user_role)
 User.create(name: 'yull', email: 'yull@example.com', password: 'password3', password_confirmation: 'password3', role: editor_role)
 
 # Property Types

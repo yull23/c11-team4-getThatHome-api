@@ -6,6 +6,9 @@ class User < ApplicationRecord
 
   # Validations
   validates :name, presence: true, uniqueness: true, length: { maximum: 16 }
-
+  
+#Varios usuarios tienen el mismo rol
   belongs_to :role
+  # has_many :role 
+
 end

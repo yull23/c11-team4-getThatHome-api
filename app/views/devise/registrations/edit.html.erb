@@ -31,9 +31,11 @@
     <%= f.password_field :current_password, autocomplete: "current-password" %>
   </div>
 
+  <%= f.select :role, options_for_select([['Admin', 'admin'], ['Usuario', 'usuario'], ['Editor', 'editor']]) %>
   <div class="actions">
     <%= f.submit "Update" %>
   </div>
+  
 <% end %>
 
 <h3>Cancel my account</h3>

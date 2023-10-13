@@ -29,7 +29,7 @@
 
   <div class="field">
   <%= f.label :role %><br />
-  <%= f.select :role, options_for_select([['Admin', 'admin'], ['Usuario', 'usuario'], ['Editor', 'editor']]) %>
+    <%= f.text_field :role, autofocus: true, autocomplete: "rol" %>
   </div>
 
   <div class="actions">
