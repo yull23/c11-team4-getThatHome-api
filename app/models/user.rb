@@ -6,6 +6,6 @@ class User < ApplicationRecord
 
   # Validations
   validates :name, presence: true, uniqueness: true, length: { maximum: 16 }
-#no es obligatorio tener un rol para el usuario optional: true
-  belongs_to :role , optional: true
+  # no es obligatorio tener un rol para el usuario optional: true
+  belongs_to :role, optional: true
 end

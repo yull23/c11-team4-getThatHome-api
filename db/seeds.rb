@@ -1,10 +1,3 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
 require "faker"
 
 Role.create(name: 'admin')
@@ -17,17 +10,12 @@ user_role = Role.find_by(name: 'Landlord')
 editor_role = Role.find_by(name: 'editor')
 
 # Crea usuarios con roles
-<<<<<<< HEAD
-puts "Creating users with roles"
-=======
 puts "Creating users"
->>>>>>> issue#4-create-device
 User.create(name: 'david', email: 'david@example.com', password: 'password1', password_confirmation: 'password1', role: admin_role)
-User.create(name: 'roxana', email: 'roxana@example.com', password: '  ', password_confirmation: 'password2', role: user_role)
+User.create(name: 'roxana', email: 'roxana@example.com', password: 'password2', password_confirmation: 'password2', role: user_role)
 User.create(name: 'yull', email: 'yull@example.com', password: 'password3', password_confirmation: 'password3', role: editor_role)
 
-# Property Types
-puts "Creating property types"
+puts "start creating property types"
 types = [
   {
     name: "Apartment"
@@ -44,8 +32,6 @@ types.each do |type_data|
   end
 end
 puts "end creating property types"
-<<<<<<< HEAD
-=======
 
 # Addresses
 puts "start creating addresses"
@@ -132,4 +118,3 @@ properties_to_own.each do |property|
   end
 end
 puts "end creating own"
->>>>>>> issue#4-create-device
