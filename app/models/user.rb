@@ -8,4 +8,8 @@ class User < ApplicationRecord
   validates :name, presence: true, uniqueness: true, length: { maximum: 16 }
 
   belongs_to :role
+  
+  def role_name
+    role.name
+  end
 end
