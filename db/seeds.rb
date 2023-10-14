@@ -1,27 +1,57 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
 require "faker"
 
-Role.create(name: 'admin')
-Role.create(name: 'Landlord')
-Role.create(name: 'editor')
-puts "End creating roles"
-# Primero, obtén las instancias de los roles
-admin_role = Role.find_by(name: 'admin')
-user_role = Role.find_by(name: 'Landlord')
-editor_role = Role.find_by(name: 'editor')
+puts "start destroying data ..."
+UserProperty.destroy_all
+PropertyForSale.destroy_all
+PropertyForRent.destroy_all
+Property.destroy_all
+User.destroy_all
+Role.destroy_all
+PropertyType.destroy_all
+UserProperty.destroy_all
+puts "end destroying data ..."
 
-# Crea usuarios con roles
-puts "Creating users"
-User.create(name: 'david', email: 'david@example.com', password: 'password1', password_confirmation: 'password1', role: admin_role)
-User.create(name: 'roxana', email: 'roxana@example.com', password: '  ', password_confirmation: 'password2', role: user_role)
-User.create(name: 'yull', email: 'yull@example.com', password: 'password3', password_confirmation: 'password3', role: editor_role)
+# Roles
+puts "start creating roles"
+roles = [
+  {
+    name: "Homeseeker"
+  }, {
+    name: "Landlord"
+  }
+]
 
+roles.each do |role_data|
+  role = Role.create(role_data)
+  unless role.persisted?
+    puts role.errors.full_messages
+    puts role
+  end
+end
+puts "end creating roles"
+
+# Users
+puts "start creating users"
+roles = Role.all.to_a
+index = 1
+
+5.times do
+  user = User.create(
+    name: "Test#{index}",
+    email: "test#{index}@mail.com",
+    role: roles.sample,
+    password: "123456",
+    phone: Faker::PhoneNumber.unique.cell_phone_in_e164
+  )
+  unless user.persisted?
+    puts user.errors.full_messages
+    puts user
+  end
+  index += 1
+end
+puts "end creating users"
+
+# Property Types
 puts "start creating property types"
 types = [
   {
@@ -51,7 +81,6 @@ addresses_data.each do |address_data|
   end
 end
 puts "end creating addresses"
-
 # Properties
 puts "start creating properties"
 urls = ["https://images.freeimages.com/images/large-previews/e85/house-1224030.jpg",
