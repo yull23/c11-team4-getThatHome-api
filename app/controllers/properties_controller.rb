@@ -1,6 +1,6 @@
 class PropertiesController < ApplicationController
     def index
-        @properties = Property.all
+        @properties = Property.where(active: true)
         render json: @properties
     end
     # GET /properties/1
@@ -20,11 +20,6 @@ class PropertiesController < ApplicationController
     
         @property = Property.new(body)
         if @property.save  
-          #unless change_operation_type(op_type)
-            #@property.destroy
-            #address.destroy
-            #return render json: {operation_type: ["Incorrect data"]}, status: :unprocessable_entity 
-          #end
             render json: @property
         else
           render json: @property.errors, status: :unprocessable_entity
@@ -40,49 +35,45 @@ class PropertiesController < ApplicationController
         #     render json: {"message": "Property not found"}, status: :not_found
         # end    
     end
-    
+
+    def destroy
+        property = properties.find(params[:id])
+        property.destroy
+    end    
+
     def update
-        property = Property.find_by(id: params[:id])
-        if property.update(property_params)
-            render json: property
-        else
-            render json: property.errors.full_messages, status: :unprocessable_entity
-        end 
+        #return render status: :unauthorized #unless current_user.role_name == "Landlord"
+        property = Property.find(params[:id])
+        puts "Hola"
+        puts property
+        p json: property
+
+        #address = PropertyAddress.find_by(id: property.property_address_id)
+        #address.update(modify_params(params[:address],["name"])) if params[:address].present?
+        #photos = params[:photo_url]
+        #op_type = params[:operation_type]
+        #other_data_keys = ["bedrooms", "bathrooms", "area", "description", "active", "property_type_id","property_address_id"]
+        #other_data = property_params.select { |k, _v| other_data_keys.include?(k) }
+    
+        #body = photos.present? ? (other_data.merge!({ photo_url: photos })) : other_data
+    #     if op_type.present?
+    #      is_same_op_type = @property.operation_type[:type] == op_type[:type]
+    #      change_op_type = is_same_op_type ? change_operation_data(op_type) : change_operation_type(op_type)
+    #     else
+    #       change_op_type = true
+    #     end
+    #     return render json: {operation_type: ["Incorrect data"]} unless body
+        # if @property.update(body)
+        #   render json: @property
+        # else
+        #    render json: @property.errors, status: :unprocessable_entity
+        #  end
     end
-
-    def update
-        return render status: :unauthorized unless current_user.role_name == "Landlord"
-    
-        address = Address.find(@property.address.id)
-        address.update(modify_params(params[:address],["name"])) if params[:address].present?
-        photos = params[:photo_urls]
-        op_type = params[:operation_type]
-        other_data_keys = ["bedrooms", "bathrooms", "area", "description", "active", "property_type_id"]
-        other_data = property_params.select { |k, _v| other_data_keys.include?(k) }
-    
-        body = photos.present? ? (other_data.merge!({ photo_urls: photos })) : other_data
-        if op_type.present?
-         is_same_op_type = @property.operation_type[:type] == op_type[:type]
-         change_op_type = is_same_op_type ? change_operation_data(op_type) : change_operation_type(op_type)
-        else
-          change_op_type = true
-        end
-        return render json: {operation_type: ["Incorrect data"]} unless change_op_type
-        if @property.update(body)
-          render json: @property
-        else
-          render json: @property.errors, status: :unprocessable_entity
-        end
-      end
-
-
-
-
 
     private
 
     def property_params
-        params.permit(:bedrooms, :bathrooms, :area, :description, :active, :property_type_id, :address,
+        params.permit(:bedrooms, :bathrooms, :area, :description, :active, :property_type_id, :property_address_id,
                       :photo_urls, :operation_type)
     end 
 
@@ -94,6 +85,22 @@ class PropertiesController < ApplicationController
         new_hash.map { |k, v| { k => exceptions.include?(k) ? v : v.to_f } }.reduce(:merge)
     end
 
+    def change_operation_data(op_type)
+        data = op_type.except("type")
+        modified_data = modify_params(data,data.keys)
+        case op_type[:type]
+        when "for rent"
+          model = PropertyForRent
+        when "for sale"
+          model = PropertyForSale
+        else
+          return false
+        end
+        prop = model&.find_by(property: @property)
+        attrs = model&.attribute_names || []
+        return false unless modified_data.keys.all?{|k| attrs.include?(k)}
+        prop.update(modified_data) 
+    end
     # def change_operation_type(op_type)
     #     data = op_type.except("type").merge!({ property_id: @property.id })
     #     modified_data = modify_params(data,data.keys)
@@ -115,7 +122,7 @@ class PropertiesController < ApplicationController
     #     new_prop = model.new(modified_data)
     #     new_prop.save
     #     other_model.destroy_by(property: @property) if new_prop.persisted?
-    #     UserProperty.create(user: current_user, ownable: new_prop) if new_prop.persisted?
+    #     #UserProperty.create(user: current_user, ownable: new_prop) if new_prop.persisted?
     #     new_prop.persisted?
     # end
 end
