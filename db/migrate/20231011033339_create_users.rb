@@ -6,10 +6,11 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :email
       t.string :password_digest
       t.string :token
-      t.references :role, null: false, foreign_key: true
+      t.bigint :role_id, null: false
       
       t.timestamps
     end
     add_index :users, :token, unique: true
+    add_foreign_key :users, :roles
   end
 end

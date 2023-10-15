@@ -5,4 +5,5 @@ class User < ApplicationRecord
   def invalidate_token
     update(token: nil)
   end
+  belongs_to :role
 end

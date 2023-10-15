@@ -11,45 +11,20 @@ PropertyType.destroy_all
 UserProperty.destroy_all
 puts "end destroying data ..."
 
-# Roles
-puts "start creating roles"
-roles = [
-  {
-    name: "Homeseeker"
-  }, {
-    name: "Landlord"
-  }
-]
+Role.create(name: 'admin')
+Role.create(name: 'Landlord')
+Role.create(name: 'editor')
+puts "End creating roles"
+# Primero, obtén las instancias de los roles
+admin_role = Role.find_by(name: 'admin')
+user_role = Role.find_by(name: 'Landlord')
+editor_role = Role.find_by(name: 'editor')
 
-roles.each do |role_data|
-  role = Role.create(role_data)
-  unless role.persisted?
-    puts role.errors.full_messages
-    puts role
-  end
-end
-puts "end creating roles"
-
-# Users
-puts "start creating users"
-roles = Role.all.to_a
-index = 1
-
-5.times do
-  user = User.create(
-    name: "Test#{index}",
-    email: "test#{index}@mail.com",
-    role: roles.sample,
-    password: "123456",
-    phone: Faker::PhoneNumber.unique.cell_phone_in_e164
-  )
-  unless user.persisted?
-    puts user.errors.full_messages
-    puts user
-  end
-  index += 1
-end
-puts "end creating users"
+# Crea usuarios con roles
+puts "Creating users"
+User.create(name: 'david', email: 'david@example.com', password: 'password1', role: admin_role)
+User.create(name: 'roxana', email: 'roxana@example.com', password: 'password2', role: user_role)
+User.create(name: 'yull', email: 'yull@example.com', password: 'password3', role: editor_role)
 
 # Property Types
 puts "start creating property types"
