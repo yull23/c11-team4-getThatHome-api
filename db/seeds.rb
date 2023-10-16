@@ -1,20 +1,29 @@
 require "faker"
-require "json"
 
-addresses_data = JSON.parse(File.read("db/addresses.json"), symbolize_names: true)
-
-#Para empezar con las tablas en blanco
 puts "start destroying data ..."
-UserPropertyable.destroy_all
-PropertyUser.destroy_all
+UserProperty.destroy_all
 PropertyForSale.destroy_all
 PropertyForRent.destroy_all
 Property.destroy_all
 User.destroy_all
 Role.destroy_all
 PropertyType.destroy_all
-PropertyAddress.destroy_all
+UserProperty.destroy_all
 puts "end destroying data ..."
+
+Role.create(name: 'Tenant')
+Role.create(name: 'Landlord')
+
+puts "End creating roles"
+# Primero, obtén las instancias de los roles
+admin_role = Role.find_by(name: 'Tenant')
+user_role = Role.find_by(name: 'Landlord')
+
+
+# Crea usuarios con roles
+puts "Creating users"
+User.create(name: 'david', email: 'david@example.com', password: 'password1', role: admin_role)
+User.create(name: 'roxana', email: 'roxana@example.com', password: 'password2', role: user_role)
 
 
 # Primero, obtén las instancias de los roles
