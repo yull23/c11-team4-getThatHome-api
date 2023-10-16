@@ -26,19 +26,6 @@ User.create(name: 'david', email: 'david@example.com', password: 'password1', ro
 User.create(name: 'roxana', email: 'roxana@example.com', password: 'password2', role: user_role)
 
 
-# Primero, obtén las instancias de los roles
-Role.create(name: 'admin')
-Role.create(name: 'Landlord')
-Role.create(name: 'Homeseeker')
-admin_role = Role.find_by(name: 'admin')
-landlord_role = Role.find_by(name: 'Landlord')
-homeseeker_role = Role.find_by(name: 'Homeseeker')
-
-# Crea usuarios con roles
-User.create(name: 'david', email: 'david@example.com', password: 'password1', password_confirmation: 'password1', role: admin_role)
-User.create(name: 'roxana', email: 'roxana@example.com', password: 'password2', password_confirmation: 'password2', role: landlord_role)
-User.create(name: 'yull', email: 'yull@example.com', password: 'password3', password_confirmation: 'password3', role: homeseeker_role)
-
 puts "start creating property types"
 types = [
   {

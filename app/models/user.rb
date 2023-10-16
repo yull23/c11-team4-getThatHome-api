@@ -6,6 +6,5 @@ class User < ApplicationRecord
   def invalidate_token
     update(token: nil)
   end
-
-  delegate :name, to: :role, prefix: true
+  
 end
