@@ -1,16 +1,14 @@
 class PropertiesController < ApplicationController
   before_action :set_property, only: %i[show update destroy]
+  # before_action :authorize, only: %i[create update destroy]
+  skip_before_action :authorize, only: %i[destroy update]
 
   def index
-    @properties = Property.where(active: false)
+    @properties = Property.where(active: true)
     render json: @properties
   end
 
   # GET /properties/1
-  def show
-    render json: @properties
-  end
-
   def show
     if @property
       render json: @property
@@ -66,7 +64,7 @@ class PropertiesController < ApplicationController
   private
 
   def set_property
-    Rails.logger.debug @property = Property.find(params[:id])
+    @property = Property.find(params[:id])
   end
 
   def property_params
