@@ -22,9 +22,6 @@ class UsersController < ApplicationController
 
 
   def create
-#     role = Role.find_by(name:user_params[:role] )
-
-# @user = User.new(user_params.except("role").merge!({role: role}))
     @user = User.new(user_params)
     puts @user.name
     puts @user.role
