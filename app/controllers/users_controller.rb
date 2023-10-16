@@ -8,7 +8,9 @@ class UsersController < ApplicationController
   end
 
   # GET /users/1
-  def show; end
+  def show
+    render json: User.find(params[:id])
+  end
 
   # GET /users/new
   def new
@@ -18,16 +20,6 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit; end
 
-  # POST /users
-  # def create
-  #   @user = User.new(user_params)
-
-  #   if @user.save
-  #     redirect_to @user, notice: "User was successfully created."
-  #   else
-  #     render :new, status: :unprocessable_entity
-  #   end
-  # end
 
   def create
 #     role = Role.find_by(name:user_params[:role] )
