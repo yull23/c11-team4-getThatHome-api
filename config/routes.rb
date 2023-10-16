@@ -5,8 +5,8 @@ Rails.application.routes.draw do
 
   post '/login' => 'sessions#create'
   get '/logout' => 'sessions#destroy'
-  post '/users/new' => 'users#create'
-  get '/users/' => 'users#show'
-
+  post '/users' => 'users#create'
+  # get '/users/' => 'users#show'
+  resources :users
   resources :property_user, only: [:index, :show, :create, :destroy]
 end
