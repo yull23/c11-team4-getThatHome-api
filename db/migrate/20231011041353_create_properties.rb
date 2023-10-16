@@ -3,12 +3,12 @@ class CreateProperties < ActiveRecord::Migration[7.0]
     create_table :properties do |t|
       t.references :property_type, null: false, foreign_key: true
       t.references :property_address, null: false, foreign_key: true
-      t.integer :bedrooms
-      t.integer :bathrooms
+      t.integer :bedrooms, default: 0
+      t.integer :bathrooms, default: 0
       t.integer :area
       t.text :description
-      t.string :photo_url
-      t.boolean :active
+      t.string :photo_url, array: true, default:[]
+      t.boolean :active, default: true, null:false
 
       t.timestamps
     end

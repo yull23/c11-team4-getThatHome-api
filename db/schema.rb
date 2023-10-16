@@ -17,12 +17,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_031749) do
   create_table "properties", force: :cascade do |t|
     t.bigint "property_type_id", null: false
     t.bigint "property_address_id", null: false
-    t.integer "bedrooms"
-    t.integer "bathrooms"
+    t.integer "bedrooms", default: 0
+    t.integer "bathrooms", default: 0
     t.integer "area"
     t.text "description"
-    t.string "photo_url"
-    t.boolean "active"
+    t.string "photo_url", default: [], array: true
+    t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["property_address_id"], name: "index_properties_on_property_address_id"
@@ -31,17 +31,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_031749) do
 
   create_table "property_addresses", force: :cascade do |t|
     t.string "name"
-    t.bigint "latitude"
-    t.bigint "longitude"
+    t.bigint "latitude", null: false
+    t.bigint "longitude", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "property_for_rents", force: :cascade do |t|
     t.bigint "property_id", null: false
-    t.integer "monthly_rent"
-    t.integer "maintenance"
-    t.boolean "pets_allowed"
+    t.integer "monthly_rent", null: false
+    t.integer "maintenance", null: false
+    t.boolean "pets_allowed", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["property_id"], name: "index_property_for_rents_on_property_id"
@@ -49,7 +49,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_031749) do
 
   create_table "property_for_sales", force: :cascade do |t|
     t.bigint "property_id", null: false
-    t.integer "price"
+    t.integer "price", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["property_id"], name: "index_property_for_sales_on_property_id"
@@ -59,6 +59,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_031749) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_property_types_on_name", unique: true
   end
 
   create_table "property_users", force: :cascade do |t|
@@ -76,6 +77,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_031749) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_roles_on_name", unique: true
   end
 
   create_table "user_properties", force: :cascade do |t|
@@ -89,20 +91,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_031749) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "phone"
-    t.bigint "role_id", null: false
+    t.string "email"
+    t.string "password_digest"
+    t.string "token"
+    t.integer "role_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["name"], name: "index_users_on_name", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["role_id"], name: "index_users_on_role_id"
+    t.index ["token"], name: "index_users_on_token", unique: true
   end
 
   add_foreign_key "properties", "property_addresses"

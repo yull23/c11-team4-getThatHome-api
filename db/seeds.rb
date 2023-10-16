@@ -1,26 +1,30 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
 require "faker"
 
-Role.create(name: 'admin')
-Role.create(name: 'Landlord')
-Role.create(name: 'editor')
+puts "start destroying data ..."
+UserProperty.destroy_all
+PropertyForSale.destroy_all
+PropertyForRent.destroy_all
+Property.destroy_all
+User.destroy_all
+Role.destroy_all
+PropertyType.destroy_all
+UserProperty.destroy_all
+puts "end destroying data ..."
 
+Role.create(name: 'Tenant')
+Role.create(name: 'Landlord')
+
+puts "End creating roles"
 # Primero, obtén las instancias de los roles
-admin_role = Role.find_by(name: 'admin')
+admin_role = Role.find_by(name: 'Tenant')
 user_role = Role.find_by(name: 'Landlord')
-editor_role = Role.find_by(name: 'editor')
+
 
 # Crea usuarios con roles
+puts "Creating users"
+User.create(name: 'david', email: 'david@example.com', password: 'password1', role: admin_role)
+User.create(name: 'roxana', email: 'roxana@example.com', password: 'password2', role: user_role)
 
-User.create(name: 'david', email: 'david@example.com', password: 'password1', password_confirmation: 'password1', role: admin_role)
-User.create(name: 'roxana', email: 'roxana@example.com', password: 'password2', password_confirmation: 'password2', role: user_role)
-User.create(name: 'yull', email: 'yull@example.com', password: 'password3', password_confirmation: 'password3', role: editor_role)
 
 puts "start creating property types"
 types = [
@@ -40,17 +44,16 @@ types.each do |type_data|
 end
 puts "end creating property types"
 
-# Addresses
-puts "start creating addresses"
-addresses_data = JSON.parse(File.read("db/addresses.json"), symbolize_names: true)
-addresses_data.each do |address_data|
-  address = PropertyAddress.create(address_data)
-  unless address.persisted?
-    puts address.errors.full_messages
-    puts address
-  end
-end
-puts "end creating addresses"
+# # Addresses
+# puts "start creating addresses"
+# addresses_data.each do |address_data|
+#   address = PropertyAddress.create(address_data)
+#   unless address.persisted?
+#     puts address.errors.full_messages
+#     puts address
+#   end
+# end
+# puts "end creating addresses"
 
 # Properties
 puts "start creating properties"
