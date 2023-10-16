@@ -44,15 +44,11 @@ class PropertiesController < ApplicationController
     def update
         #return render status: :unauthorized #unless current_user.role_name == "Landlord"
         property = Property.find(params[:id])
-        puts "Hola"
-        puts property
-        p json: property
-
-        #address = PropertyAddress.find_by(id: property.property_address_id)
-        #address.update(modify_params(params[:address],["name"])) if params[:address].present?
-        #photos = params[:photo_url]
+        address = PropertyAddress.find_by(id: property.property_address_id)
+        address.update(modify_params(params[:address],["name"])) if params[:address].present?
+        photos = params[:photo_url]
         #op_type = params[:operation_type]
-        #other_data_keys = ["bedrooms", "bathrooms", "area", "description", "active", "property_type_id","property_address_id"]
+        other_data_keys = ["bedrooms", "bathrooms", "area", "description", "active", "property_type_id"]
         #other_data = property_params.select { |k, _v| other_data_keys.include?(k) }
     
         #body = photos.present? ? (other_data.merge!({ photo_url: photos })) : other_data

@@ -1,17 +1,26 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
 require "faker"
+require "json"
 
+addresses_data = JSON.parse(File.read("db/addresses.json"), symbolize_names: true)
+
+#Para empezar con las tablas en blanco
+puts "start destroying data ..."
+UserPropertyable.destroy_all
+PropertyUser.destroy_all
+PropertyForSale.destroy_all
+PropertyForRent.destroy_all
+Property.destroy_all
+User.destroy_all
+Role.destroy_all
+PropertyType.destroy_all
+PropertyAddress.destroy_all
+puts "end destroying data ..."
+
+
+# Primero, obtén las instancias de los roles
 Role.create(name: 'admin')
 Role.create(name: 'Landlord')
 Role.create(name: 'Homeseeker')
-
-# Primero, obtén las instancias de los roles
 admin_role = Role.find_by(name: 'admin')
 landlord_role = Role.find_by(name: 'Landlord')
 homeseeker_role = Role.find_by(name: 'Homeseeker')
@@ -41,7 +50,6 @@ puts "end creating property types"
 
 # Addresses
 puts "start creating addresses"
-addresses_data = JSON.parse(File.read("db/addresses.json"), symbolize_names: true)
 addresses_data.each do |address_data|
   address = PropertyAddress.create(address_data)
   unless address.persisted?
