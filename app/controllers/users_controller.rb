@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[show edit update destroy]
-  before_action :authenticate_user!, only: %i[index]
+  skip_before_action :authorize!, only: :create
 
   # GET /users
   def index
@@ -19,15 +19,30 @@ class UsersController < ApplicationController
   def edit; end
 
   # POST /users
-  def create
-    @user = User.new(user_params)
+  # def create
+  #   @user = User.new(user_params)
 
+  #   if @user.save
+  #     redirect_to @user, notice: "User was successfully created."
+  #   else
+  #     render :new, status: :unprocessable_entity
+  #   end
+  # end
+
+  def create
+#     role = Role.find_by(name:user_params[:role] )
+
+# @user = User.new(user_params.except("role").merge!({role: role}))
+    @user = User.new(user_params)
+    puts @user.name
+    puts @user.role
     if @user.save
-      redirect_to @user, notice: "User was successfully created."
+      render json: @user, status: :created # 201
     else
-      render :new, status: :unprocessable_entity
+      render json: { errors: @user.errors }, status: :unprocessable_entity
     end
   end
+
 
   # PATCH/PUT /users/1
   def update
@@ -53,6 +68,6 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.require(:user).permit(:name, :email, :phone, :password, :role_id)
+    params.require(:user).permit(:name, :email, :phone, :password_digest, :role)
   end
 end
