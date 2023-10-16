@@ -7,8 +7,5 @@ class User < ApplicationRecord
     update(token: nil)
   end
 
-  def role_name
-    role.name
-  end
-
+  delegate :name, to: :role, prefix: true
 end

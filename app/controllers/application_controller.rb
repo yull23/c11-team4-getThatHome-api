@@ -3,7 +3,7 @@ class ApplicationController < ActionController::API
   # This module is required for using authenticate_with_http_token method
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
-  before_action :authorize!, only: [:edit, :update, :destroy]
+  before_action :authorize!, only: %i[edit update destroy]
 
   def current_user
     @current_user ||= authenticate_token

@@ -20,18 +20,16 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit; end
 
-
   def create
     @user = User.new(user_params)
-    puts @user.name
-    puts @user.role
+    Rails.logger.debug @user.name
+    Rails.logger.debug @user.role
     if @user.save
       render json: @user, status: :created # 201
     else
       render json: { errors: @user.errors }, status: :unprocessable_entity
     end
   end
-
 
   # PATCH/PUT /users/1
   def update

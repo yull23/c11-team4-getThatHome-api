@@ -1,6 +1,6 @@
 class PropertyUserController < ApplicationController
   before_action :authenticate_user!
-  before_action :require_homeseeker_role, only: [:index, :create, :update]
+  before_action :require_homeseeker_role, only: %i[index create update]
 
   def index
     @saved_properties = SavedProperty.where(user: current_user)
@@ -9,7 +9,7 @@ class PropertyUserController < ApplicationController
 
   def create
     property = Property.find_by(id: params[:property_id])
-    @saved_property = SavedProperty.new(property: property, user: current_user)
+    @saved_property = SavedProperty.new(property:, user: current_user)
 
     if @saved_property.save
       render json: @saved_property, status: :ok
@@ -31,9 +31,10 @@ class PropertyUserController < ApplicationController
   private
 
   def require_homeseeker_role
-    unless current_user.role_name == "Homeseeker"
-      render status: :unprocessable_entity, json: { error: "Acceso denegado. Se requiere el rol de Homeseeker." }
-    end
+    return if current_user.role_name == "Homeseeker"
+
+    render status: :unprocessable_entity,
+           json: { error: "Acceso denegado. Se requiere el rol de Homeseeker." }
   end
 
   def saved_properties_params

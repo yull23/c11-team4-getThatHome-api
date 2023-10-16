@@ -25,7 +25,20 @@ puts "Creating users"
 User.create(name: 'david', email: 'david@example.com', password: 'password1', role: admin_role)
 User.create(name: 'roxana', email: 'roxana@example.com', password: 'password2', role: user_role)
 
-# Property Types
+
+# Primero, obtén las instancias de los roles
+Role.create(name: 'admin')
+Role.create(name: 'Landlord')
+Role.create(name: 'Homeseeker')
+admin_role = Role.find_by(name: 'admin')
+landlord_role = Role.find_by(name: 'Landlord')
+homeseeker_role = Role.find_by(name: 'Homeseeker')
+
+# Crea usuarios con roles
+User.create(name: 'david', email: 'david@example.com', password: 'password1', password_confirmation: 'password1', role: admin_role)
+User.create(name: 'roxana', email: 'roxana@example.com', password: 'password2', password_confirmation: 'password2', role: landlord_role)
+User.create(name: 'yull', email: 'yull@example.com', password: 'password3', password_confirmation: 'password3', role: homeseeker_role)
+
 puts "start creating property types"
 types = [
   {
@@ -44,17 +57,17 @@ types.each do |type_data|
 end
 puts "end creating property types"
 
-# Addresses
-puts "start creating addresses"
-addresses_data = JSON.parse(File.read("db/addresses.json"), symbolize_names: true)
-addresses_data.each do |address_data|
-  address = PropertyAddress.create(address_data)
-  unless address.persisted?
-    puts address.errors.full_messages
-    puts address
-  end
-end
-puts "end creating addresses"
+# # Addresses
+# puts "start creating addresses"
+# addresses_data.each do |address_data|
+#   address = PropertyAddress.create(address_data)
+#   unless address.persisted?
+#     puts address.errors.full_messages
+#     puts address
+#   end
+# end
+# puts "end creating addresses"
+
 # Properties
 puts "start creating properties"
 urls = ["https://images.freeimages.com/images/large-previews/e85/house-1224030.jpg",
