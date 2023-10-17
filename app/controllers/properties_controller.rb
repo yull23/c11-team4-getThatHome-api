@@ -1,8 +1,8 @@
 class PropertiesController < ApplicationController
   before_action :set_property, only: %i[show update destroy]
-  # before_action :authorize, only: %i[create update destroy]
   skip_before_action :authorize, only: %i[destroy update]
-
+  
+  # GET /properties
   def index
     @properties = Property.where(active: true)
     render json: @properties
@@ -18,7 +18,6 @@ class PropertiesController < ApplicationController
   end
 
   def create
-    # return render status: :unauthorized unless #current_user.role_name == "Landlord"
     address = PropertyAddress.new(modify_params(params[:address], ["name"]))
     unless address.save
       return render json: { address: ["Incorrect data"] },
@@ -69,7 +68,7 @@ class PropertiesController < ApplicationController
 
   def property_params
     params.permit(:bedrooms, :bathrooms, :area, :description, :active, :property_type_id, :property_address_id,
-                  :photo_urls)
+                  :photo_url)
   end
 
   # guarda data a una tabla hash

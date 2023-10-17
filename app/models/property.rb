@@ -16,8 +16,14 @@ class Property < ApplicationRecord
     if for_sale.present?
       { type: "for sale", price: for_sale.price }
     elsif for_rent.present?
-      { type: "for rent", monthly_rent: for_rent.monthly_rent, maintenance: for_rent.maintenance,
-        pets_allowed: for_rent.pets_allowed }
+      {
+        type: "for rent",
+        monthly_rent: for_rent.monthly_rent,
+        maintenance: for_rent.maintenance,
+        pets_allowed: for_rent.pets_allowed
+      }
     end
   end
+
+  
 end
