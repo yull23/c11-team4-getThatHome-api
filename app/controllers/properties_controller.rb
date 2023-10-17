@@ -1,7 +1,7 @@
 class PropertiesController < ApplicationController
   before_action :set_property, only: %i[show update destroy]
   skip_before_action :authorize, only: %i[destroy update]
-  
+
   # GET /properties
   def index
     @properties = Property.where(active: true)
