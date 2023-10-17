@@ -1,10 +1,9 @@
 class PropertyUserController < ApplicationController
-  before_action :authenticate_user!
-  before_action :require_homeseeker_role, only: %i[index create update]
+  before_action :authorize
+  # before_action :require_homeseeker_role, only: %i[index create update]
 
   def index
-    @saved_properties = SavedProperty.where(user: current_user)
-    render json: @saved_properties
+    @property_users = PropertyUser.all
   end
 
   def create

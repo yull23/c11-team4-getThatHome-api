@@ -80,6 +80,23 @@ types = PropertyType.all.to_a
 end
 puts "end creating properties"
 
+puts "Create PropertyUsers"
+property = Property.all.to_a
+user = User.all.to_a
+20.times do
+  propertyUser = PropertyUser.create(
+    property_id: property.sample,
+    user_id: user.sample,
+    favorite:true,
+    contacted:true
+  )
+  unless propertyUser .persisted?
+    puts propertyUser .errors.full_messages
+    puts propertyUser 
+  end
+end
+puts "End PropertyUsers"
+
 # Properties For Rent or Sale
 puts "start creating properties for sale or rent"
 properties = Property.all.to_a
