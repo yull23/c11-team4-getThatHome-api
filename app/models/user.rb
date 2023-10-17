@@ -1,11 +1,10 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+  has_secure_password
+  has_secure_token
+  belongs_to :role
 
-  # Validations
-  validates :name, presence: true, uniqueness: true, length: { maximum: 16 }
-  # no es obligatorio tener un rol para el usuario optional: true
-  belongs_to :role, optional: true
+  def invalidate_token
+    update(token: nil)
+  end
+  
 end
