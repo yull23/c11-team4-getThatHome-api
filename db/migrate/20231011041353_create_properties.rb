@@ -1,6 +1,7 @@
 class CreateProperties < ActiveRecord::Migration[7.0]
   def change
     create_table :properties do |t|
+      t.references :property_type, null: false, foreign_key: true
       t.references :property_address, null: false, foreign_key: true
       t.integer :bedrooms, default: 0
       t.integer :bathrooms, default: 0
@@ -12,7 +13,7 @@ class CreateProperties < ActiveRecord::Migration[7.0]
       t.integer :monthly_rent, null: false
       t.integer :maintenance, null: false
       t.boolean :pets_allowed, null: false
-      t.string :name, index: {unique: true}
+      t.string :operation, 
 
       t.timestamps
     end
