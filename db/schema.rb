@@ -65,6 +65,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_property_types_on_name", unique: true
   end
 
   create_table "property_users", force: :cascade do |t|

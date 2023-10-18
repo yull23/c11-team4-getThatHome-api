@@ -1,9 +1,10 @@
 require "faker"
 
 puts "start destroying data ..."
-Property.destroy_all
-User.destroy_all
 Role.destroy_all
+User.destroy_all
+PropertyType.destroy_all
+Property.destroy_all
 puts "end destroying data ..."
 
 Role.create(name: 'HomeSeeker')
@@ -30,12 +31,8 @@ types = [
   }
 ]
 
-types.each do |type_data|
-  type = PropertyType.create(type_data)
-  unless type.persisted?
-    puts type.errors.full_messages
-    puts type
-  end
+types.each do |type|
+  PropertyType.create(name: type[:name])
 end
 puts "end creating property types"
 
@@ -61,13 +58,13 @@ urls = ["https://images.freeimages.com/images/large-previews/e85/house-1224030.j
     bathrooms: rand(1...5),
     area: rand(8..30) * 10,
     description: Faker::Lorem.paragraph_by_chars(number: 150, supplemental: false),
-    photo_url: urls.sample(rand(1...urls.length)),
+    photo_url: urls.sample(rand(2...urls.length)),
     active: Faker::Boolean.boolean,
     price: Faker::Number.between(from: 1000, to: 5000),
     monthly_rent: Faker::Number.between(from: 500, to: 2000),
     maintenance: Faker::Number.between(from: 50, to: 500),
     pets_allowed: Faker::Boolean.boolean,
-    operation: "For sale"
+    operation: ["Sale", "Rent"].sample
   )
   unless property.persisted?
     puts property.errors.full_messages
