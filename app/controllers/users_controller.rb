@@ -47,6 +47,10 @@ class UsersController < ApplicationController
     redirect_to users_url, notice: "User was successfully destroyed.", status: :see_other
   end
 
+  def profile
+    render json: current_user
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
