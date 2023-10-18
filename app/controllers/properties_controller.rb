@@ -57,6 +57,12 @@ class PropertiesController < ApplicationController
     render json: { message: 'Propiedad eliminada con éxito' }
   end
 
+  def listBestPrice
+    @properties = Property.where(active: true)
+    @properties = @properties.order(price: :ASC)
+    render json: @properties
+  end
+
   private
 
   def set_property

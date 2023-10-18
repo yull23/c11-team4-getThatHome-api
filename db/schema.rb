@@ -70,8 +70,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
   create_table "property_users", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "property_id", null: false
-    t.boolean "favorite"
-    t.boolean "contacted"
+    t.boolean "favorite", default: false
+    t.boolean "contacted", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["property_id"], name: "index_property_users_on_property_id"

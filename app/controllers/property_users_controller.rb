@@ -24,6 +24,19 @@ class PropertyUsersController < ApplicationController
     end
   end
 
+  def listfavorites
+    @favorite = PropertyUser.where(user: current_user,favorite: true)
+    puts @favorite
+    render json: @favorite
+
+  end
+
+  def listcontacts
+    @contact = PropertyUser.where(user: current_user,contacted: true)
+    puts @contact
+    render json: @contact
+
+  end
 
   # PATCH/PUT /property_users/1
   def update
