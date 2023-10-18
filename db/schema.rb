@@ -45,20 +45,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
 
   create_table "property_for_rents", force: :cascade do |t|
     t.bigint "property_id", null: false
-    t.bigint "users_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["property_id"], name: "index_property_for_rents_on_property_id"
-    t.index ["users_id"], name: "index_property_for_rents_on_users_id"
+    t.index ["user_id"], name: "index_property_for_rents_on_user_id"
   end
 
   create_table "property_for_sales", force: :cascade do |t|
     t.bigint "property_id", null: false
-    t.bigint "users_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["property_id"], name: "index_property_for_sales_on_property_id"
-    t.index ["users_id"], name: "index_property_for_sales_on_users_id"
+    t.index ["user_id"], name: "index_property_for_sales_on_user_id"
   end
 
   create_table "property_types", force: :cascade do |t|
@@ -101,9 +101,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
   add_foreign_key "properties", "property_addresses"
   add_foreign_key "properties", "property_types"
   add_foreign_key "property_for_rents", "properties"
-  add_foreign_key "property_for_rents", "users", column: "users_id"
+  add_foreign_key "property_for_rents", "users"
   add_foreign_key "property_for_sales", "properties"
-  add_foreign_key "property_for_sales", "users", column: "users_id"
+  add_foreign_key "property_for_sales", "users"
   add_foreign_key "property_users", "properties"
   add_foreign_key "property_users", "users"
   add_foreign_key "users", "roles"

@@ -5,6 +5,8 @@ Role.destroy_all
 User.destroy_all
 PropertyType.destroy_all
 Property.destroy_all
+PropertyAddress.destroy_all
+PropertyUser.destroy_all 
 puts "end destroying data ..."
 
 Role.create(name: 'HomeSeeker')
@@ -37,12 +39,32 @@ end
 puts "end creating property types"
 
 # Crear registros ficticios en la tabla property_addresses
+puts 'Start creating Property Addresses'
 10.times do
   property_address = PropertyAddress.create(
     name: Faker::Address.street_name,
     latitude: Faker::Address.latitude,
     longitude: Faker::Address.longitude
   )
+
+puts 'End creating Property Addresses'
+
+# Crear registros en la tabla property_users
+puts 'Start creating Property Users'
+users = User.all
+properties = Property.all
+
+users.each do |user|
+  properties.sample(5).each do |property|
+    PropertyUser.create(
+      user: user,
+      property: property,
+      favorite: Faker::Boolean.boolean,
+      contacted: Faker::Boolean.boolean
+    )
+  end
+end
+puts 'End creating Property Users'
 
 # Properties
 puts "start creating Properties"
@@ -64,7 +86,7 @@ urls = ["https://images.freeimages.com/images/large-previews/e85/house-1224030.j
     monthly_rent: Faker::Number.between(from: 500, to: 2000),
     maintenance: Faker::Number.between(from: 50, to: 500),
     pets_allowed: Faker::Boolean.boolean,
-    operation: ["Sale", "Rent"].sample
+    operation: %w[Sale Rent].sample
   )
   unless property.persisted?
     puts property.errors.full_messages
@@ -72,5 +94,4 @@ urls = ["https://images.freeimages.com/images/large-previews/e85/house-1224030.j
   end
 end
 puts "end creating properties"
-
 end
