@@ -27,10 +27,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
     t.integer "monthly_rent", null: false
     t.integer "maintenance", null: false
     t.boolean "pets_allowed", null: false
+    t.string "operation", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "operation"
-    t.string "#<ActiveRecord::ConnectionAdapters::PostgreSQL::TableDefinition"
     t.index ["property_address_id"], name: "index_properties_on_property_address_id"
     t.index ["property_type_id"], name: "index_properties_on_property_type_id"
   end

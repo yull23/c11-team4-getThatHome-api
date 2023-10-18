@@ -13,8 +13,9 @@ class CreateProperties < ActiveRecord::Migration[7.0]
       t.integer :monthly_rent, null: false
       t.integer :maintenance, null: false
       t.boolean :pets_allowed, null: false
-      t.string :operation, 
+      t.string :operation, null: false 
 
+      
       t.timestamps
     end
   end

@@ -1,5 +1,5 @@
 class PropertiesController < ApplicationController
-  before_action :set_property, only: %i[show update destroy]
+  before_action :set_property, only: %i[show edit update destroy]
   skip_before_action :authorize, only: %i[destroy update]
 
   # GET /properties
@@ -13,26 +13,22 @@ class PropertiesController < ApplicationController
     if @property
       render json: @property
     else
-      render json: @property.errors, status: :unprocessable_entity
+      render json: { error: 'Propiedad no encontrada' }, status: :not_found
     end
   end
 
   def create
-    address = PropertyAddress.new(modify_params(params[:address], ["name"]))
+    address = PropertyAddress.new(name: params[:address][:name])
     unless address.save
-      return render json: { address: ["Incorrect data"] },
-                    status: :unprocessable_entity
+      render json: { error: 'Error al crear la dirección de la propiedad' }, status: :unprocessable_entity
+      return
     end
 
     photos = params[:photo_url]
-    # op_type = params[:operation_type]
-    other_data_keys = ["bedrooms", "bathrooms", "area", "description", "active",
-                       "property_type_id"]
-    other_data = property_params.select { |k, _v| other_data_keys.include?(k) }
-    # "merge!" modifica el hash original directamente
-    body = other_data.merge!({ photo_url: photos, property_address: address })
+    other_data_keys = %i[bedrooms bathrooms area description active property_type_id]
+    other_data = property_params.slice(*other_data_keys).merge(photo_url: photos, property_address: address)
 
-    @property = Property.new(body)
+    @property = Property.new(other_data)
     if @property.save
       render json: @property
     else
@@ -41,14 +37,14 @@ class PropertiesController < ApplicationController
   end
 
   def update
-    # return render status: :unauthorized #unless current_user.role_name == "Landlord"
     address = PropertyAddress.find_by(id: @property.property_address_id)
-    address.update(modify_params(params[:address], ["name"])) if params[:address].present?
-    photos = params[:photo_url]
-    data_keys = ["bedrooms", "bathrooms", "area", "description", "active", "property_type_id"]
-    other_data = property_params.select { |k, _v| data_keys.include?(k) }
+    address.update(name: params.dig(:address, :name)) if params.dig(:address, :name).present?
 
-    body = photos.present? ? other_data.merge!({ photo_url: photos }) : other_data
+    photos = params[:photo_url]
+    data_keys = %i[bedrooms bathrooms area description active property_type_id]
+    other_data = property_params.slice(*data_keys)
+
+    body = photos.present? ? other_data.merge(photo_url: photos) : other_data
     if @property.update(body)
       render json: @property
     else
@@ -58,6 +54,7 @@ class PropertiesController < ApplicationController
 
   def destroy
     @property.destroy
+    render json: { message: 'Propiedad eliminada con éxito' }
   end
 
   private
@@ -67,15 +64,6 @@ class PropertiesController < ApplicationController
   end
 
   def property_params
-    params.permit(:bedrooms, :bathrooms, :area, :description, :active, :property_type_id, :property_address_id,
-                  :photo_url)
-  end
-
-  # guarda data a una tabla hash
-  def modify_params(hash, exceptions)
-    keys = hash.keys
-    new_hash = {}
-    keys.each { |k| new_hash[k] = hash[k] }
-    new_hash.map { |k, v| { k => exceptions.include?(k) ? v : v.to_f } }.reduce(:merge)
+    params.permit(:bedrooms, :bathrooms, :area, :description, :active, :property_type_id, :property_address_id, :photo_url)
   end
 end
