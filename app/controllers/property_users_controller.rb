@@ -24,12 +24,6 @@ class PropertyUsersController < ApplicationController
     end
   end
 
-  def listFavorite
-    where(user: current_user)
-    @favorite = PropertyUser.find(params[:id])
-    @favorite = @favorite.where()
-
-  end
 
   # PATCH/PUT /property_users/1
   def update
