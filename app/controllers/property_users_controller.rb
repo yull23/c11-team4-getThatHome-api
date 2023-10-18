@@ -24,10 +24,17 @@ class PropertyUsersController < ApplicationController
     end
   end
 
-  def listFavorite
-    where(user: current_user)
-    @favorite = PropertyUser.find(params[:id])
-    @favorite = @favorite.where()
+  def listfavorites
+    @favorite = PropertyUser.where(user: current_user,favorite: true)
+    puts @favorite
+    render json: @favorite
+
+  end
+
+  def listcontacts
+    @contact = PropertyUser.where(user: current_user,contacted: true)
+    puts @contact
+    render json: @contact
 
   end
 
