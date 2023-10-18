@@ -8,4 +8,6 @@ Rails.application.routes.draw do
   resources :property_users
   get 'favorite', :to => 'property_users#listfavorites'
   get 'contact', :to => 'property_users#listcontacts'
+  get 'listBestPrice', :to => 'properties#listBestPrice'
+  
 end
