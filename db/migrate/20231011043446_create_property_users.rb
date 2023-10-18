@@ -3,8 +3,8 @@ class CreatePropertyUsers < ActiveRecord::Migration[7.0]
     create_table :property_users do |t|
       t.references :user, null: false, foreign_key: true
       t.references :property, null: false, foreign_key: true
-      t.boolean :favorite
-      t.boolean :contacted
+      t.boolean :favorite , false
+      t.boolean :contacted , false
 
       t.timestamps
     end
