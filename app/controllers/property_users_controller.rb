@@ -1,5 +1,5 @@
 class PropertyUsersController < ApplicationController
-  before_action :set_property_user, only: [:show, :update, :destroy]
+  before_action :set_property_user, only: %i[show update destroy]
   before_action :authorize
 
   # GET /property_users
@@ -25,17 +25,15 @@ class PropertyUsersController < ApplicationController
   end
 
   def listfavorites
-    @favorite = PropertyUser.where(user: current_user,favorite: true)
-    puts @favorite
+    @favorite = PropertyUser.where(user: current_user, favorite: true)
+    Rails.logger.debug @favorite
     render json: @favorite
-
   end
 
   def listcontacts
-    @contact = PropertyUser.where(user: current_user,contacted: true)
-    puts @contact
+    @contact = PropertyUser.where(user: current_user, contacted: true)
+    Rails.logger.debug @contact
     render json: @contact
-
   end
 
   # PATCH/PUT /property_users/1
