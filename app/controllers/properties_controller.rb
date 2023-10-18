@@ -13,20 +13,22 @@ class PropertiesController < ApplicationController
     if @property
       render json: @property
     else
-      render json: { error: 'Propiedad no encontrada' }, status: :not_found
+      render json: { error: "Propiedad no encontrada" }, status: :not_found
     end
   end
 
   def create
     address = PropertyAddress.new(name: params[:address][:name])
     unless address.save
-      render json: { error: 'Error al crear la dirección de la propiedad' }, status: :unprocessable_entity
+      render json: { error: "Error al crear la dirección de la propiedad" },
+             status: :unprocessable_entity
       return
     end
 
     photos = params[:photo_url]
     other_data_keys = %i[bedrooms bathrooms area description active property_type_id]
-    other_data = property_params.slice(*other_data_keys).merge(photo_url: photos, property_address: address)
+    other_data = property_params.slice(*other_data_keys).merge(photo_url: photos,
+                                                               property_address: address)
 
     @property = Property.new(other_data)
     if @property.save
@@ -54,7 +56,7 @@ class PropertiesController < ApplicationController
 
   def destroy
     @property.destroy
-    render json: { message: 'Propiedad eliminada con éxito' }
+    render json: { message: "Propiedad eliminada con éxito" }
   end
 
   def listBestPrice
@@ -70,6 +72,7 @@ class PropertiesController < ApplicationController
   end
 
   def property_params
-    params.permit(:bedrooms, :bathrooms, :area, :description, :active, :property_type_id, :property_address_id, :photo_url)
+    params.permit(:bedrooms, :bathrooms, :area, :description, :active, :property_type_id,
+                  :property_address_id, :photo_url)
   end
 end
