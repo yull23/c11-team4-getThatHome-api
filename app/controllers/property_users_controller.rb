@@ -26,8 +26,18 @@ class PropertyUsersController < ApplicationController
 
   def listfavorites
     @favorite = PropertyUser.where(user: current_user, favorite: true)
+    p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
+    p @favorite
+    p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
+    @nuevo_arreglo = @favorite.map do |fav|
+      Property.find(fav.user_id)
+    end
+    p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
+    p @nuevo_arreglo
+    p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
+
     Rails.logger.debug @favorite
-    render json: @favorite
+    render json: @nuevo_arreglo
   end
 
   def listcontacts
