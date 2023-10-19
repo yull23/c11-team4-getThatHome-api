@@ -86,7 +86,9 @@ urls = ["https://images.freeimages.com/images/large-previews/e85/house-1224030.j
     monthly_rent: Faker::Number.between(from: 500, to: 2000),
     maintenance: Faker::Number.between(from: 50, to: 500),
     pets_allowed: Faker::Boolean.boolean,
-    operation: %w[Sale Rent].sample
+    operation: %w[Sale Rent].sample,
+    p_phone: Faker::PhoneNumber.cell_phone,
+    p_email: Faker::Internet.email
   )
   unless property.persisted?
     puts property.errors.full_messages

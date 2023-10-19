@@ -28,6 +28,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
     t.integer "maintenance"
     t.boolean "pets_allowed", default: false
     t.string "operation", null: false
+    t.string "p_phone"
+    t.string "p_email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["property_address_id"], name: "index_properties_on_property_address_id"
@@ -88,7 +90,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
     t.string "phone"
-    t.string "email"
+    t.string "email", null: false
     t.string "password_digest"
     t.string "token"
     t.integer "role_id", null: false

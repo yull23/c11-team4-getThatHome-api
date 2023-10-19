@@ -14,6 +14,8 @@ class CreateProperties < ActiveRecord::Migration[7.0]
       t.integer :maintenance
       t.boolean :pets_allowed, default: false
       t.string :operation, null: false 
+      t.string :p_phone
+      t.string :p_email
 
       
       t.timestamps
