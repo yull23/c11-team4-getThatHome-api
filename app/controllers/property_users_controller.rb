@@ -26,12 +26,18 @@ class PropertyUsersController < ApplicationController
 
   def listfavorites
     @favorite = PropertyUser.where(user: current_user, favorite: true)
+    @nuevo_arreglo = @favorite.map do |fav|
+      Property.find(fav.property_id)
+    end
     Rails.logger.debug @favorite
-    render json: @favorite
+    render json: @nuevo_arreglo
   end
 
   def listcontacts
     @contact = PropertyUser.where(user: current_user, contacted: true)
+    @nuevo_arreglo = @contact.map do |cont|
+      Property.find(cont.contact_id)
+    end
     Rails.logger.debug @contact
     render json: @contact
   end

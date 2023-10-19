@@ -26,7 +26,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
     t.integer "price"
     t.integer "monthly_rent"
     t.integer "maintenance"
-    t.boolean "pets_allowed", null: false
+    t.boolean "pets_allowed", default: false
     t.string "operation", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
