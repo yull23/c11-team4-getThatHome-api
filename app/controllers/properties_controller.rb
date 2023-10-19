@@ -73,7 +73,7 @@ class PropertiesController < ApplicationController
   def listBestPrice
     @properties = Property.where(active: true, operation: "Rent")
     @properties = @properties.order(price: :ASC)
-    render json: @properties
+    render json: @properties[0, 3]
   end
 
   private

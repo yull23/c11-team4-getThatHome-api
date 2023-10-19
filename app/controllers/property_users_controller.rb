@@ -30,7 +30,7 @@ class PropertyUsersController < ApplicationController
     p @favorite
     p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
     @nuevo_arreglo = @favorite.map do |fav|
-      Property.find(fav.user_id)
+      Property.find(fav.property_id)
     end
     p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
     p @nuevo_arreglo
