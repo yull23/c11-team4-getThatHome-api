@@ -1,7 +1,7 @@
 class PropertiesController < ApplicationController
   before_action :set_property, only: %i[show edit update destroy]
-  skip_before_action :authorize, only: %i[destroy update]
-
+  before_action  :authorize, only: %i[create destroy update]
+  # skip_before_action
   # GET /properties
   def index
     @properties = Property.where(active: true)
@@ -11,7 +11,11 @@ class PropertiesController < ApplicationController
   # GET /properties/1
   def show
     if @property
-      render json: @property
+      render json: {
+        id: @property,
+        latitude: @property.property_address.latitude,
+        longitude: @property.property_address.longitude,
+      }
     else
       render json: { error: "Propiedad no encontrada" }, status: :not_found
     end
@@ -20,8 +24,10 @@ class PropertiesController < ApplicationController
   def create
     address = PropertyAddress.new(name: params[:address][:name])
     unless address.save
-      render json: { error: "Error al crear la dirección de la propiedad" },
-             status: :unprocessable_entity
+      render json: { 
+        error: "Error al crear la dirección de la propiedad",
+        errors: address.errors.full_messages  # Agrega los mensajes de error
+      }, status: :unprocessable_entity
       return
     end
 
@@ -34,7 +40,10 @@ class PropertiesController < ApplicationController
     if @property.save
       render json: @property
     else
-      render json: @property.errors, status: :unprocessable_entity
+      render json: { 
+        error: "Error al crear la propiedad",
+        errors: @property.errors.full_messages  # Agrega los mensajes de error
+      }, status: :unprocessable_entity
     end
   end
 
