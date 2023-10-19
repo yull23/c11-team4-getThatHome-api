@@ -24,28 +24,23 @@ class PropertiesController < ApplicationController
   def create
     address = PropertyAddress.new(name: params[:address][:name])
     unless address.save
-      render json: { 
-        error: "Error al crear la dirección de la propiedad",
-        errors: address.errors.full_messages  # Agrega los mensajes de error
-      }, status: :unprocessable_entity
+      render json: { error: 'Error al crear la dirección de la propiedad' }, status: :unprocessable_entity
       return
     end
 
     photos = params[:photo_url]
-    other_data_keys = %i[bedrooms bathrooms area description active property_type_id]
-    other_data = property_params.slice(*other_data_keys).merge(photo_url: photos,
-                                                               property_address: address)
+    data_keys = %i[bedrooms bathrooms area description active property_type_id]
+    other_data = property_params.slice(*data_keys).merge(photo_url: photos, property_address: address)
 
     @property = Property.new(other_data)
     if @property.save
       render json: @property
     else
-      render json: { 
-        error: "Error al crear la propiedad",
-        errors: @property.errors.full_messages  # Agrega los mensajes de error
-      }, status: :unprocessable_entity
+      render json: @property.errors, status: :unprocessable_entity
     end
   end
+
+  
 
   def update
     address = PropertyAddress.find_by(id: @property.property_address_id)
@@ -81,7 +76,12 @@ class PropertiesController < ApplicationController
   end
 
   def property_params
-    params.permit(:bedrooms, :bathrooms, :area, :description, :active, :property_type_id,
-                  :property_address_id, :photo_url)
+    params.permit(
+      :bedrooms, :bathrooms, :area, :description, :active, :property_type_id,
+      photo_url: [],  # Permitir un array de photo_url
+      address: [:name, :latitude, :longitude]
+    )
   end
+  
+
 end
