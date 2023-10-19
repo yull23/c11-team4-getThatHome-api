@@ -24,9 +24,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
     t.string "photo_url", default: [], array: true
     t.boolean "active", default: true, null: false
     t.integer "price"
-    t.integer "monthly_rent", null: false
-    t.integer "maintenance", null: false
-    t.boolean "pets_allowed", null: false
+    t.integer "monthly_rent"
+    t.integer "maintenance"
+    t.boolean "pets_allowed", default: false
     t.string "operation", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -36,8 +36,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
 
   create_table "property_addresses", force: :cascade do |t|
     t.string "name"
-    t.float "latitude", null: false
-    t.float "longitude", null: false
+    t.float "latitude"
+    t.float "longitude"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

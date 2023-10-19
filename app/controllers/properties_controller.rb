@@ -1,7 +1,7 @@
 class PropertiesController < ApplicationController
   before_action :set_property, only: %i[show edit update destroy]
-  skip_before_action :authorize, only: %i[destroy update]
-
+  before_action :authorize, only: %i[create destroy update]
+  # skip_before_action
   # GET /properties
   def index
     @properties = Property.where(active: true)
@@ -11,24 +11,35 @@ class PropertiesController < ApplicationController
   # GET /properties/1
   def show
     if @property
-      render json: @property
+      render json: {
+        id: @property,
+        latitude: @property.property_address.latitude,
+        longitude: @property.property_address.longitude
+      }
     else
-      render json: { error: 'Propiedad no encontrada' }, status: :not_found
+      render json: { error: "Propiedad no encontrada" }, status: :not_found
     end
   end
 
+  # POST /properties
   def create
-    address = PropertyAddress.new(name: params[:address][:name])
+    address = PropertyAddress.new(name: params[:address][:name], latitude: params[:address][:latitude],
+                                  longitude: params[:address][:longitude])
+
     unless address.save
-      render json: { error: 'Error al crear la dirección de la propiedad' }, status: :unprocessable_entity
+      render json: { error: "Error al crear la dirección de la propiedad" },
+             status: :unprocessable_entity
       return
     end
 
     photos = params[:photo_url]
-    other_data_keys = %i[bedrooms bathrooms area description active property_type_id]
-    other_data = property_params.slice(*other_data_keys).merge(photo_url: photos, property_address: address)
+    data_keys = %i[bedrooms bathrooms area description active property_type_id price monthly_rent
+                   maintenance pets_allowed operation]
+    other_data = property_params.slice(*data_keys).merge(photo_url: photos,
+                                                         property_address: address)
 
     @property = Property.new(other_data)
+
     if @property.save
       render json: @property
     else
@@ -54,13 +65,13 @@ class PropertiesController < ApplicationController
 
   def destroy
     @property.destroy
-    render json: { message: 'Propiedad eliminada con éxito' }
+    render json: { message: "Propiedad eliminada con éxito" }
   end
 
   def listBestPrice
-    @properties = Property.where(active: true)
+    @properties = Property.where(active: true, operation: "Rent")
     @properties = @properties.order(price: :ASC)
-    render json: @properties
+    render json: @properties[0, 3]
   end
 
   private
@@ -70,6 +81,9 @@ class PropertiesController < ApplicationController
   end
 
   def property_params
-    params.permit(:bedrooms, :bathrooms, :area, :description, :active, :property_type_id, :property_address_id, :photo_url)
+    params.permit(
+      :bedrooms, :bathrooms, :area, :description, :operation, :active, :monthly_rent, :maintenance, :price, :property_type_id, :pets_allowed, photo_url: [],
+                                                                                                                                              address: %i[name latitude longitude]
+    )
   end
 end

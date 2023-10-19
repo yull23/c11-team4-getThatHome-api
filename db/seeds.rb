@@ -20,8 +20,8 @@ user_role = Role.find_by(name: 'HomeSeeker')
 
 # Crea usuarios con roles
 puts "Creating users"
-User.create(name: 'david', email: 'david@example.com', password: 'password1', role: admin_role)
-User.create(name: 'roxana', email: 'roxana@example.com', password: 'password2', role: user_role)
+User.create(name: 'david',phone: '5520760605',email: 'david@example.com', password: 'password1', role: admin_role)
+User.create(name: 'roxana',phone: '51986145530', email: 'roxana@example.com', password: 'password2', role: user_role)
 
 
 puts "start creating property types"
@@ -71,7 +71,7 @@ puts "start creating Properties"
 urls = ["https://images.freeimages.com/images/large-previews/e85/house-1224030.jpg",
         "https://media.istockphoto.com/photos/new-housing-estate-with-underground-garage-picture-id1287012612?s=612x612", "https://images.freeimages.com/images/large-previews/d5b/home-1224274.jpg", "https://images.freeimages.com/images/large-previews/4b4/beach-house-1225387.jpg"]
 
-20.times do
+10.times do
   property_type = PropertyType.all.sample
   property = Property.create(
     property_type: property_type,
