@@ -80,7 +80,7 @@ class PropertiesController < ApplicationController
 
   def property_params
     params.permit(
-      :bedrooms, :bathrooms, :area, :description, :active, :property_type_id, :pets_allowed, photo_url: [], 
+      :bedrooms, :bathrooms, :area, :description, :active, :property_type_id,:operation, :pets_allowed, photo_url: [], 
       address: [:name, :latitude, :longitude]
     )
   end
