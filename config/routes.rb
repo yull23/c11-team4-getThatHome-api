@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   resources :users, only: %i[create show]
   get "profile", to: "users#profile"
+  resources :property_users
   resources :properties
   get "my_property", to: "property_users#my_properties"
   get "favorite", to: "property_users#listfavorites"
