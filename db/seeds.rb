@@ -16,7 +16,7 @@ admin_role = Role.find_by(name: 'Landord')
 user_role = Role.find_by(name: 'HomeSeeker')
 
 # Crea usuarios con roles
-puts "Creating users"
+puts "Start Creating users"
 User.create(name: 'user1', phone: '51999999991', email: 'user1@example.com', password: 'password', role: user_role)
 User.create(name: 'user2', phone: '51999999992', email: 'user2@example.com', password: 'password', role: user_role)
 User.create(name: 'user3', phone: '51999999993', email: 'user3@example.com', password: 'password', role: user_role)
@@ -29,6 +29,11 @@ User.create(name: 'admin3', phone: '51999999903', email: 'admin3@example.com', p
 User.create(name: 'admin4', phone: '51999999904', email: 'admin4@example.com', password: 'password', role: admin_role)
 User.create(name: 'admin5', phone: '51999999905', email: 'admin5@example.com', password: 'password', role: admin_role)
 User.create(name: 'admin6', phone: '51999999906', email: 'admin6@example.com', password: 'password', role: admin_role)
+
+users= User.all[0,6]
+admins= User.all[6,12]
+
+puts "End Creating users"
 
 puts "Start creating property types"
 property_types = ["Apartment", "House"]
@@ -71,6 +76,7 @@ urls = [
   property = Property.create(
     property_type: property_type,
     property_address: property_address,
+    user:admins.sample,
     operation: %w[Sale Rent].sample,
     price: Faker::Number.between(from: 1000, to: 5000),
     maintenance: Faker::Number.between(from: 50, to: 500),
@@ -89,25 +95,11 @@ urls = [
 end
 puts "end creating properties"
 properties = Property.all
-# Crear registros en la tabla user_properties
 
-puts 'Start creating User Properties'
-admins= User.all[6,12]
-
-properties.each  do |property|
-  UserProperty.create(
-    user: admins.sample,
-    property: property,
-  )
-end
-
-puts 'End creating User Properties'
 
 
 # Crear registros en la tabla property_users
 puts 'Start creating Property Users'
-users= User.all[0,6]
-p users.length
 
 properties.each_with_index  do |property,index|
   if(index%3==3)

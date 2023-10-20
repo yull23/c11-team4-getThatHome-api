@@ -1,8 +1,8 @@
 class Property < ApplicationRecord
   belongs_to :property_type
   belongs_to :property_address
-  has_many :property_user, dependent: :destroy
-  has_one :user_properties, dependent: :destroy
+  belongs_to :user
+  has_many :property_users, dependent: :destroy
 
   # validations
   validates :area, :description, presence: true
