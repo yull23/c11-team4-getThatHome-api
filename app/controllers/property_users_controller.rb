@@ -40,7 +40,19 @@ class PropertyUsersController < ApplicationController
     Rails.logger.debug @contact
     render json: @nuevo_arreglo
   end
-  
+
+  def listland
+    User.where(role_id: 1)
+    @property_sale = PropertyForSale.all
+    render json: @property_sale
+  end
+
+  # GET /listhome
+  def listhome
+    User.where(role_id: 2)
+    @property_rent = PropertyForRent.all
+    render json: @property_rent
+  end
 
   # PATCH/PUT /property_users/1
   def update
@@ -65,4 +77,5 @@ class PropertyUsersController < ApplicationController
   def property_user_params
     params.require(:property_user).permit(:user_id, :property_id, :favorite, :contacted)
   end
+
 end
