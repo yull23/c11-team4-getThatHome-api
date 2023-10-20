@@ -3,5 +3,5 @@ class PropertyType < ApplicationRecord
 
   # Validations
 
-  validates :name, presence: true, uniqueness: false
+  validates :name, presence: true
 end

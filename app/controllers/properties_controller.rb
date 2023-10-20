@@ -49,24 +49,26 @@ class PropertiesController < ApplicationController
   end
 
   def update
-    address = PropertyAddress.find_by(id: @property.property_address_id)
-    address.update(name: params.dig(:address, :name)) if params.dig(:address, :name).present?
-
-    photos = params[:photo_url]
-    data_keys = %i[bedrooms bathrooms area description active property_type_id]
-    other_data = property_params.slice(*data_keys)
-
-    body = photos.present? ? other_data.merge(photo_url: photos) : other_data
-    if @property.update(body)
-      render json: @property
-    else
-      render json: @property.errors, status: :unprocessable_entity
-    end
+    @property = set_property
+    address = PropertyAddress.find(@property.property_address_id)
+    type_property = PropertyType.find(@property.property_type_id)
+    # @property.update(params[:property])
+    p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
+    p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
+    p type_property
+    @property.update(data_property)
+    address.update(data_property_addres)
+    type_property.update(data_property_type)
+    p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
   end
 
   def destroy
-    @property.destroy
-    render json: { message: "Propiedad eliminada con éxito" }
+    if current_user.id == @property.user_id
+      @property.destroy
+      render json: { message: "Propiedad eliminada con éxito" }
+    else
+      render json: @property.errors, status: :unprocessable_entity
+    end
   end
 
   def listBestPrice
@@ -92,10 +94,49 @@ class PropertiesController < ApplicationController
     }
   end
 
+  def data_property
+    {
+      operation: params[:property][:operation],
+      price: params[:property][:price],
+      maintenance: params[:property][:maintenance],
+      area: params[:property][:area],
+      description: params[:property][:description],
+      bedrooms: params[:property][:bedrooms],
+      bathrooms: params[:property][:bathrooms],
+      pets_allowed: params[:property][:pets_allowed],
+      photo_url: params[:property][:photo_url],
+      active: params[:property][:active]
+    }
+  end
+
+  def data_property_addres
+    {
+      name: params[:property_address][:name],
+      latitude: params[:property_address][:latitude],
+      longitude: params[:property_address][:longitude]
+    }
+  end
+
+  def data_property_type
+    {
+      name: params[:property_type][:name]
+    }
+  end
+
   def property_params
-    params.permit(
-      :bedrooms, :bathrooms, :area, :description, :operation, :active, :t_phone, :t_email, :monthly_rent, :maintenance, :price, :property_type_id, :pets_allowed, photo_url: [],
-                                                                                                                                                                  address: %i[name latitude longitude]
-    )
+    params.permit(:id,
+                  property: %i[property_type_id
+                               property_address_id
+                               operation
+                               price
+                               maintenance
+                               area
+                               description
+                               bedrooms
+                               bathrooms
+                               pets_allowed
+                               active],
+                  property_type: %i[name],
+                  property_address: %i[name latitude longitude])
   end
 end
