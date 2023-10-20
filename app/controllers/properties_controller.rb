@@ -5,16 +5,19 @@ class PropertiesController < ApplicationController
   # GET /properties
   def index
     @properties = Property.where(active: true)
-    render json: @properties
+    all_properties = @properties.map do |index_property|
+      { property: index_property,
+        address: PropertyAddress.find(index_property.property_address_id) }
+    end
+    render json: all_properties
   end
 
   # GET /properties/1
   def show
     if @property
       render json: {
-        id: @property,
-        latitude: @property.property_address.latitude,
-        longitude: @property.property_address.longitude
+        property: @property,
+        address: PropertyAddress.find(@property.property_address_id)
       }
     else
       render json: { error: "Propiedad no encontrada" }, status: :not_found
@@ -39,9 +42,6 @@ class PropertiesController < ApplicationController
                                                          property_address: address)
 
     @property = Property.new(other_data)
-    p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
-    p @property
-    p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
     if @property.save
       render json: @property
     else
