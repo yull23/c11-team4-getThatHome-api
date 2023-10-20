@@ -6,7 +6,7 @@ class PropertiesController < ApplicationController
   def index
     @properties = Property.where(active: true)
     all_properties = @properties.map do |index_property|
-      get_property_view(index_property)
+      property_view(index_property)
     end
     render json: all_properties
   end
@@ -15,7 +15,7 @@ class PropertiesController < ApplicationController
   def show
     if @property
 
-      render json: get_property_view(@property)
+      render json: property_view(@property)
     else
       render json: { error: "Propiedad no encontrada" }, status: :not_found
     end
@@ -23,29 +23,35 @@ class PropertiesController < ApplicationController
 
   # POST /properties
   def create
-    address = PropertyAddress.new(name: params[:address][:name], latitude: params[:address][:latitude],
-                                  longitude: params[:address][:longitude])
+    address = PropertyAddress.create(data_property_addres)
+    type_property = PropertyType.find_by(name:params[:property_type][:name])
+    @property=Property.new(user:current_user,property_type: type_property,property_address:address)
+    @property.update(data_property)
+    @property.save
+    render json: property_view(@property)
+    # address = PropertyAddress.new(name: params[:address][:name], latitude: params[:address][:latitude],
+    #                               longitude: params[:address][:longitude])
 
-    unless address.save
-      render json: { error: "Error al crear la dirección de la propiedad" },
-             status: :unprocessable_entity
-      return
-    end
-    # Update
+    # unless address.save
+    #   render json: { error: "Error al crear la dirección de la propiedad" },
+    #          status: :unprocessable_entity
+    #   return
+    # end
+    # # Update
 
-    photos = params[:photo_url]
-    data_keys = %i[bedrooms bathrooms area description active property_type_id price monthly_rent
-                   maintenance pets_allowed operation t_phone t_email]
-    other_data = property_params.slice(*data_keys).merge(photo_url: photos,
-                                                         property_address: address)
+    # photos = params[:photo_url]
+    # data_keys = %i[bedrooms bathrooms area description active property_type_id price monthly_rent
+    #                maintenance pets_allowed operation t_phone t_email]
+    # other_data = property_params.slice(*data_keys).merge(photo_url: photos,
+    #                                                      property_address: address)
 
-    @property = Property.new(other_data)
-    p @property
-    if @property.save
-      render json: @property
-    else
-      render json: @property.errors, status: :unprocessable_entity
-    end
+    # @property = Property.new(other_data)
+    # p @property
+    # if @property.save
+    #   render json: @property
+    # else
+    #   render json: @property.errors, status: :unprocessable_entity
+    # end
   end
 
   def update
@@ -76,7 +82,7 @@ class PropertiesController < ApplicationController
     @properties = Property.where(active: true, operation: "Rent")
     properties_sorted = @properties.sort_by { |propertyView| propertyView.price }
     best_property = properties_sorted[0, 3].map do |a|
-      get_property_view(a)
+      property_view(a)
     end
     render json: best_property
   end
@@ -87,7 +93,7 @@ class PropertiesController < ApplicationController
     @property = Property.find(params[:id])
   end
 
-  def get_property_view(propertyFound)
+  def property_view(propertyFound)
     {
       property: propertyFound,
       property_type: PropertyType.find_by(property: propertyFound),
