@@ -3,12 +3,12 @@ Rails.application.routes.draw do
   get "/logout" => "sessions#destroy"
 
   resources :users, only: %i[create show]
-  # resources :profile, only: [:show]
-  # resources :property_user, only: %i[index show create destroy]
-  # resources :property_types, only: %i[index]
-  # post "/properties", to:"properties#create"
-  # get "/properties/:id", to:"properties#show"
-  # put "/properties/:id", to:"properties#update"
+  get "profile", to: "users#profile"
   resources :properties
-  resources :property_user
+  resources :property_users
+  get "favorite", to: "property_users#listfavorites"
+  get "contact", to: "property_users#listcontacts"
+  get "listBestPrice", to: "properties#listBestPrice"
+  get "listhome", to: "property_users#listHome"
+  get "listland", to: "property_users#listLand"
 end

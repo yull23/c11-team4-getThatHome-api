@@ -9,7 +9,15 @@ class CreateProperties < ActiveRecord::Migration[7.0]
       t.text :description
       t.string :photo_url, array: true, default:[]
       t.boolean :active, default: true, null:false
+      t.integer :price
+      t.integer :monthly_rent
+      t.integer :maintenance
+      t.boolean :pets_allowed, default: false
+      t.string :operation, null: false 
+      t.string :t_phone
+      t.string :t_email
 
+      
       t.timestamps
     end
   end
