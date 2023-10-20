@@ -4,8 +4,7 @@ class PropertyUsersController < ApplicationController
 
   # GET /property_users
   def index
-    @property_users = PropertyUser.where(user:current_user.id)
-    result = @property_users.map do |property_view_id|
+    result = current_user.property_users.map do |property_view_id|
       property_view(Property.find(property_view_id.property_id))
     end
     render json: result
