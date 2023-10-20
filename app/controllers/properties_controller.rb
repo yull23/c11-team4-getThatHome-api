@@ -50,16 +50,17 @@ class PropertiesController < ApplicationController
 
   def update
     @property = set_property
-    address = PropertyAddress.find(@property.property_address_id)
-    type_property = PropertyType.find(@property.property_type_id)
-    # @property.update(params[:property])
-    p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
-    p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
-    p type_property
-    @property.update(data_property)
-    address.update(data_property_addres)
-    type_property.update(data_property_type)
-    p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
+    if current_user.id == @property.user_id
+      address = PropertyAddress.find(@property.property_address_id)
+      type_property = PropertyType.find(@property.property_type_id)
+      @property.update(data_property)
+      address.update(data_property_addres)
+      type_property.update(data_property_type)
+      render json: { message: "Propiedad actualizada con éxito" }
+    else
+      render json: @property.errors, status: :unprocessable_entity
+    end
+
   end
 
   def destroy
