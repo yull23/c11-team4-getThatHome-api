@@ -15,11 +15,8 @@ class PropertiesController < ApplicationController
   # GET /properties/1
   def show
     if @property
-      render json: {
-        id: @property,
-        latitude: @property.property_address.latitude,
-        longitude: @property.property_address.longitude
-      }
+
+      render json: get_property_view(@property)
     else
       render json: { error: "Propiedad no encontrada" }, status: :not_found
     end
@@ -43,9 +40,7 @@ class PropertiesController < ApplicationController
                                                          property_address: address)
 
     @property = Property.new(other_data)
-    p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
     p @property
-    p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
     if @property.save
       render json: @property
     else
@@ -76,14 +71,25 @@ class PropertiesController < ApplicationController
 
   def listBestPrice
     @properties = Property.where(active: true, operation: "Rent")
-    @properties = @properties.order(price: :ASC)
-    render json: @properties[0, 3]
+    properties_sorted = @properties.sort_by { |propertyView| propertyView.price }
+    best_property = properties_sorted[0, 3].map do |a|
+      get_property_view(a)
+    end
+    render json: best_property
   end
 
   private
 
   def set_property
     @property = Property.find(params[:id])
+  end
+
+  def get_property_view(propertyFound)
+    {
+      property: propertyFound,
+      property_type: PropertyType.find_by(property: propertyFound),
+      property_address: PropertyAddress.find_by(property: propertyFound)
+    }
   end
 
   def property_params
