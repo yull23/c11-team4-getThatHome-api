@@ -31,6 +31,7 @@ class PropertiesController < ApplicationController
              status: :unprocessable_entity
       return
     end
+    # Update
 
     photos = params[:photo_url]
     data_keys = %i[bedrooms bathrooms area description active property_type_id price monthly_rent
