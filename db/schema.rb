@@ -10,26 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_20_165341) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "properties", force: :cascade do |t|
     t.bigint "property_type_id", null: false
     t.bigint "property_address_id", null: false
-    t.integer "bedrooms", default: 0
-    t.integer "bathrooms", default: 0
+    t.string "operation", null: false
+    t.integer "price"
+    t.integer "maintenance"
     t.integer "area"
     t.text "description"
+    t.integer "bedrooms", default: 0
+    t.integer "bathrooms", default: 0
+    t.boolean "pets_allowed", default: false
     t.string "photo_url", default: [], array: true
     t.boolean "active", default: true, null: false
-    t.integer "price"
-    t.integer "monthly_rent"
-    t.integer "maintenance"
-    t.boolean "pets_allowed", default: false
-    t.string "operation", null: false
-    t.string "t_phone"
-    t.string "t_email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["property_address_id"], name: "index_properties_on_property_address_id"
@@ -42,28 +39,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
     t.float "longitude"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "property_for_rents", force: :cascade do |t|
-    t.bigint "property_id", null: false
-    t.bigint "user_id", null: false
-    t.integer "monthly_rent"
-    t.integer "maintenance"
-    t.boolean "pets_allowed", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["property_id"], name: "index_property_for_rents_on_property_id"
-    t.index ["user_id"], name: "index_property_for_rents_on_user_id"
-  end
-
-  create_table "property_for_sales", force: :cascade do |t|
-    t.bigint "property_id", null: false
-    t.bigint "user_id", null: false
-    t.integer "price"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["property_id"], name: "index_property_for_sales_on_property_id"
-    t.index ["user_id"], name: "index_property_for_sales_on_user_id"
   end
 
   create_table "property_types", force: :cascade do |t|
@@ -91,6 +66,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
     t.index ["name"], name: "index_roles_on_name", unique: true
   end
 
+  create_table "user_properties", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "property_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["property_id"], name: "index_user_properties_on_property_id"
+    t.index ["user_id"], name: "index_user_properties_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
     t.string "phone"
@@ -105,11 +89,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
 
   add_foreign_key "properties", "property_addresses"
   add_foreign_key "properties", "property_types"
-  add_foreign_key "property_for_rents", "properties"
-  add_foreign_key "property_for_rents", "users"
-  add_foreign_key "property_for_sales", "properties"
-  add_foreign_key "property_for_sales", "users"
   add_foreign_key "property_users", "properties"
   add_foreign_key "property_users", "users"
+  add_foreign_key "user_properties", "properties"
+  add_foreign_key "user_properties", "users"
   add_foreign_key "users", "roles"
 end

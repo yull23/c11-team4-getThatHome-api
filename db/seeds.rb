@@ -17,14 +17,18 @@ user_role = Role.find_by(name: 'HomeSeeker')
 
 # Crea usuarios con roles
 puts "Creating users"
-User.create(name: 'david', phone: '5520760605', email: 'david@example.com', password: 'password1', role: admin_role)
-User.create(name: 'roxana', phone: '51986145530', email: 'roxana@example.com', password: 'password2', role: user_role)
-User.create(name: 'yull1', phone: '51999999991', email: 'yull1@example.com', password: 'password', role: user_role)
-User.create(name: 'yull2', phone: '51999999992', email: 'yull2@example.com', password: 'password', role: user_role)
-User.create(name: 'yull3', phone: '51999999993', email: 'yull3@example.com', password: 'password', role: user_role)
-User.create(name: 'yull4', phone: '51999999994', email: 'yull4@example.com', password: 'password', role: user_role)
-User.create(name: 'yull5', phone: '51999999995', email: 'yull5@example.com', password: 'password', role: user_role)
-User.create(name: 'yull6', phone: '51999999996', email: 'yull6@example.com', password: 'password', role: user_role)
+User.create(name: 'user1', phone: '51999999991', email: 'user1@example.com', password: 'password', role: user_role)
+User.create(name: 'user2', phone: '51999999992', email: 'user2@example.com', password: 'password', role: user_role)
+User.create(name: 'user3', phone: '51999999993', email: 'user3@example.com', password: 'password', role: user_role)
+User.create(name: 'user4', phone: '51999999994', email: 'user4@example.com', password: 'password', role: user_role)
+User.create(name: 'user5', phone: '51999999995', email: 'user5@example.com', password: 'password', role: user_role)
+User.create(name: 'user6', phone: '51999999996', email: 'user6@example.com', password: 'password', role: user_role)
+User.create(name: 'admin1', phone: '51999999901', email: 'admin1@example.com', password: 'password', role: admin_role)
+User.create(name: 'admin2', phone: '51999999902', email: 'admin2@example.com', password: 'password', role: admin_role)
+User.create(name: 'admin3', phone: '51999999903', email: 'admin3@example.com', password: 'password', role: admin_role)
+User.create(name: 'admin4', phone: '51999999904', email: 'admin4@example.com', password: 'password', role: admin_role)
+User.create(name: 'admin5', phone: '51999999905', email: 'admin5@example.com', password: 'password', role: admin_role)
+User.create(name: 'admin6', phone: '51999999906', email: 'admin6@example.com', password: 'password', role: admin_role)
 
 puts "Start creating property types"
 property_types = ["Apartment", "House"]
@@ -67,19 +71,16 @@ urls = [
   property = Property.create(
     property_type: property_type,
     property_address: property_address,
+    operation: %w[Sale Rent].sample,
+    price: Faker::Number.between(from: 1000, to: 5000),
+    maintenance: Faker::Number.between(from: 50, to: 500),
+    description: Faker::Lorem.paragraph_by_chars(number: 150, supplemental: false),
+    area: rand(8..30) * 10,
     bedrooms: rand(1...10),
     bathrooms: rand(1...5),
-    area: rand(8..30) * 10,
-    description: Faker::Lorem.paragraph_by_chars(number: 150, supplemental: false),
+    pets_allowed: Faker::Boolean.boolean,
     photo_url: urls.sample,
     active: Faker::Boolean.boolean,
-    price: Faker::Number.between(from: 1000, to: 5000),
-    monthly_rent: Faker::Number.between(from: 500, to: 2000),
-    maintenance: Faker::Number.between(from: 50, to: 500),
-    pets_allowed: Faker::Boolean.boolean,
-    operation: %w[Sale Rent].sample,
-    t_phone: Faker::PhoneNumber.cell_phone,
-    t_email: Faker::Internet.email
   )
   unless property.persisted?
     puts property.errors.full_messages
@@ -107,7 +108,8 @@ puts 'End creating User Properties'
 # Crear registros en la tabla property_users
 puts 'Start creating Property Users'
 properties = Property.all
-users= User.all[1..-1]
+users= User.all[0,6]
+p users.length
 
 properties.each_with_index  do |property,index|
   if(index%3==3)
