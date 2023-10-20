@@ -16,7 +16,6 @@ class PropertyUsersController < ApplicationController
   # POST /property_users
   def create
     @property_user = PropertyUser.new(property_user_params)
-
     if @property_user.save
       render json: @property_user, status: :created
     else
@@ -39,8 +38,24 @@ class PropertyUsersController < ApplicationController
 
   def listcontacts
     @contact = PropertyUser.where(user: current_user, contacted: true)
+    @nuevo_arreglo = @contact.map do |cont|
+      Property.find(cont.property_id)
+    end
     Rails.logger.debug @contact
-    render json: @contact
+    render json: @nuevo_arreglo
+  end
+
+  def listland
+    User.where(role_id: 1)
+    @property_sale = PropertyForSale.all
+    render json: @property_sale
+  end
+
+  # GET /listhome
+  def listhome
+    User.where(role_id: 2)
+    @property_rent = PropertyForRent.all
+    render json: @property_rent
   end
 
   # PATCH/PUT /property_users/1

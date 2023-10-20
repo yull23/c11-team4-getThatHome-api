@@ -9,4 +9,6 @@ Rails.application.routes.draw do
   get "favorite", to: "property_users#listfavorites"
   get "contact", to: "property_users#listcontacts"
   get "listBestPrice", to: "properties#listBestPrice"
+  get "listhome", to: "property_users#listHome"
+  get "listland", to: "property_users#listLand"
 end
