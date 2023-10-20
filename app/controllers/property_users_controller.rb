@@ -18,6 +18,7 @@ class PropertyUsersController < ApplicationController
   # POST /property_users
   def create
     @property_user = PropertyUser.new(property_user_params)
+    @property_user.update(user_id:current_user.id)
     if @property_user.save
       render json: @property_user, status: :created
     else
@@ -59,16 +60,36 @@ class PropertyUsersController < ApplicationController
 
   # PATCH/PUT /property_users/1
   def update
-    if @property_user.update(property_user_params)
-      render json: @property_user
-    else
-      render json: @property_user.errors, status: :unprocessable_entity
-    end
+    property_user= PropertyUser.find_by(user:current_user,property:set_property_user)
+    property_user.update(property_user_params)
+    render json: property_user
+
+    # if @property_user.update(property_user_params)
+    #   render json: @property_user
+    # else
+    #   render json: @property_user.errors, status: :unprocessable_entity
+    # end
   end
 
   # DELETE /property_users/1
   def destroy
     @property_user.destroy
+  end
+
+
+  def update_my_property
+    property = Property.find(property_user_params[:property_id])
+    property.active = !property.active
+    property.save
+    render json: property
+  end
+
+  def my_properties
+    all_my_properties = Property.where(user_id:current_user.id).map do |property|
+      property_view(property)
+    end
+
+    render json: all_my_properties
   end
 
   private
@@ -86,6 +107,6 @@ class PropertyUsersController < ApplicationController
   end
 
   def property_user_params
-    params.require(:property_user).permit(:user_id, :property_id, :favorite, :contacted)
+    params.require(:property_user).permit(:property_id, :favorite, :contacted)
   end
 end
