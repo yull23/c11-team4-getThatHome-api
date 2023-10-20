@@ -6,7 +6,7 @@ class PropertyUsersController < ApplicationController
   def index
     @property_users = PropertyUser.where(user:current_user.id)
     result = @property_users.map do |property_view_id|
-      property_view(Property.find(property_view_id.user_id))
+      property_view(Property.find(property_view_id.property_id))
     end
     render json: result
   end
@@ -27,25 +27,22 @@ class PropertyUsersController < ApplicationController
   end
 
   def listfavorites
-    @favorite = PropertyUser.where(user: current_user, favorite: true)
-    p @favorite
-    @nuevo_arreglo = @favorite.map do |fav|
-      showProperty = Property.find(fav.property_id)
-      { property: showProperty, address: PropertyAddress.find(showProperty.property_address_id) }
+    @favorites = PropertyUser.where(user: current_user, favorite: true)
+    result = @favorites.map do |favorite|
+      property_view(Property.find(favorite.property_id))
     end
-    p @nuevo_arreglo
 
-    Rails.logger.debug @favorite
-    render json: @nuevo_arreglo
+    Rails.logger.debug @favorites
+    render json: result
   end
 
   def listcontacts
-    @contact = PropertyUser.where(user: current_user, contacted: true)
-    @nuevo_arreglo = @contact.map do |cont|
-      Property.find(cont.property_id)
+    @contacted = PropertyUser.where(user: current_user, contacted: true)
+    result = @contacted.map do |contact|
+      property_view(Property.find(contact.property_id))
     end
-    Rails.logger.debug @contact
-    render json: @nuevo_arreglo
+    Rails.logger.debug @contacted
+    render json: result
   end
 
   def listland
