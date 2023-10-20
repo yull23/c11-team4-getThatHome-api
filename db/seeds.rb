@@ -88,33 +88,31 @@ urls = [
   end
 end
 puts "end creating properties"
-
+properties = Property.all
 # Crear registros en la tabla user_properties
 
 puts 'Start creating User Properties'
+admins= User.all[6,12]
 
-
-
+properties.each  do |property|
+  UserProperty.create(
+    user: admins.sample,
+    property: property,
+  )
+end
 
 puts 'End creating User Properties'
 
 
-
-
-
-
-
-
 # Crear registros en la tabla property_users
 puts 'Start creating Property Users'
-properties = Property.all
 users= User.all[0,6]
 p users.length
 
 properties.each_with_index  do |property,index|
   if(index%3==3)
     PropertyUser.create(
-      user: user,
+      user: users.sample,
       property: property,
       favorite: Faker::Boolean.boolean,
       contacted: Faker::Boolean.boolean
