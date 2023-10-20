@@ -4,8 +4,11 @@ class PropertyUsersController < ApplicationController
 
   # GET /property_users
   def index
-    @property_users = PropertyUser.all
-    render json: @property_users
+    @property_users = PropertyUser.where(user:current_user.id)
+    result = @property_users.map do |property_view_id|
+      property_view(Property.find(property_view_id.user_id))
+    end
+    render json: result
   end
 
   # GET /property_users/1
@@ -73,6 +76,14 @@ class PropertyUsersController < ApplicationController
   end
 
   private
+
+  def property_view(property_found)
+    {
+      property: property_found,
+      property_type: PropertyType.find_by(property: property_found),
+      property_address: PropertyAddress.find_by(property: property_found)
+    }
+  end
 
   def set_property_user
     @property_user = PropertyUser.find(params[:id])

@@ -85,7 +85,7 @@ urls = [
     bedrooms: rand(1...10),
     bathrooms: rand(1...5),
     pets_allowed: Faker::Boolean.boolean,
-    photo_url: urls.sample,
+    photo_url: urls.sample(2),
     active: Faker::Boolean.boolean,
   )
   unless property.persisted?
@@ -102,7 +102,7 @@ properties = Property.all
 puts 'Start creating Property Users'
 
 properties.each_with_index  do |property,index|
-  if(index%3==3)
+  if(index%3==0)
     PropertyUser.create(
       user: users.sample,
       property: property,
@@ -110,6 +110,7 @@ properties.each_with_index  do |property,index|
       contacted: Faker::Boolean.boolean
     )
   end
+
 end
 puts 'End creating Property Users'
 

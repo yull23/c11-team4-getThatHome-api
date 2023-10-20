@@ -29,40 +29,20 @@ class PropertiesController < ApplicationController
     @property.update(data_property)
     @property.save
     render json: property_view(@property)
-    # address = PropertyAddress.new(name: params[:address][:name], latitude: params[:address][:latitude],
-    #                               longitude: params[:address][:longitude])
-
-    # unless address.save
-    #   render json: { error: "Error al crear la dirección de la propiedad" },
-    #          status: :unprocessable_entity
-    #   return
-    # end
-    # # Update
-
-    # photos = params[:photo_url]
-    # data_keys = %i[bedrooms bathrooms area description active property_type_id price monthly_rent
-    #                maintenance pets_allowed operation t_phone t_email]
-    # other_data = property_params.slice(*data_keys).merge(photo_url: photos,
-    #                                                      property_address: address)
-
-    # @property = Property.new(other_data)
-    # p @property
-    # if @property.save
-    #   render json: @property
-    # else
-    #   render json: @property.errors, status: :unprocessable_entity
-    # end
   end
 
   def update
     @property = set_property
     if current_user.id == @property.user_id
       address = PropertyAddress.find(@property.property_address_id)
-      type_property = PropertyType.find(@property.property_type_id)
+      type_property = PropertyType.find_by(name: data_property_type[:name])
       @property.update(data_property)
+      @property.update(property_type:type_property)
       address.update(data_property_addres)
-      type_property.update(data_property_type)
-      render json: { message: "Propiedad actualizada con éxito" }
+      p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
+      p type_property
+      p "♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫"
+      render json: property_view(@property)
     else
       render json: @property.errors, status: :unprocessable_entity
     end
@@ -81,8 +61,8 @@ class PropertiesController < ApplicationController
   def listBestPrice
     @properties = Property.where(active: true, operation: "Rent")
     properties_sorted = @properties.sort_by { |propertyView| propertyView.price }
-    best_property = properties_sorted[0, 3].map do |a|
-      property_view(a)
+    best_property = properties_sorted[0, 3].map do |property_view_id|
+      property_view(property_view_id)
     end
     render json: best_property
   end
@@ -93,11 +73,11 @@ class PropertiesController < ApplicationController
     @property = Property.find(params[:id])
   end
 
-  def property_view(propertyFound)
+  def property_view(property_found)
     {
-      property: propertyFound,
-      property_type: PropertyType.find_by(property: propertyFound),
-      property_address: PropertyAddress.find_by(property: propertyFound)
+      property: property_found,
+      property_type: PropertyType.find_by(property: property_found),
+      property_address: PropertyAddress.find_by(property: property_found)
     }
   end
 
