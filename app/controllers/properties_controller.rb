@@ -6,8 +6,7 @@ class PropertiesController < ApplicationController
   def index
     @properties = Property.where(active: true)
     all_properties = @properties.map do |index_property|
-      { property: index_property,
-        address: PropertyAddress.find(index_property.property_address_id) }
+      get_property_view(index_property)
     end
     render json: all_properties
   end
