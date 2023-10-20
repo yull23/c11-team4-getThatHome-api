@@ -12,7 +12,8 @@ class PropertiesController < ApplicationController
   def show
     if @property
       render json: {
-        id: @property,
+        id:@property,
+        name:@property.property_address.name,
         latitude: @property.property_address.latitude,
         longitude: @property.property_address.longitude
       }
@@ -34,7 +35,7 @@ class PropertiesController < ApplicationController
 
     photos = params[:photo_url]
     data_keys = %i[bedrooms bathrooms area description active property_type_id price monthly_rent
-                   maintenance pets_allowed operation p_phone p_email]
+                   maintenance pets_allowed operation t_phone t_email]
     other_data = property_params.slice(*data_keys).merge(photo_url: photos,
                                                          property_address: address)
 
@@ -82,7 +83,7 @@ class PropertiesController < ApplicationController
 
   def property_params
     params.permit(
-      :bedrooms, :bathrooms, :area, :description, :operation, :active,:p_phone, :p_email, :monthly_rent, :maintenance, :price, :property_type_id, :pets_allowed, photo_url: [],
+      :bedrooms, :bathrooms, :area, :description, :operation, :active,:t_phone, :t_email, :monthly_rent, :maintenance, :price, :property_type_id, :pets_allowed, photo_url: [],
                                                                                                                                               address: %i[name latitude longitude]
     )
   end

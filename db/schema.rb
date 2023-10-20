@@ -28,8 +28,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_043446) do
     t.integer "maintenance"
     t.boolean "pets_allowed", default: false
     t.string "operation", null: false
-    t.string "p_phone"
-    t.string "p_email"
+    t.string "t_phone"
+    t.string "t_email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["property_address_id"], name: "index_properties_on_property_address_id"
