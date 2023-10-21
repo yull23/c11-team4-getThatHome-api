@@ -64,11 +64,8 @@ class PropertyUsersController < ApplicationController
     property_user.update(property_user_params)
     render json: property_user
 
-    # if @property_user.update(property_user_params)
-    #   render json: @property_user
-    # else
-    #   render json: @property_user.errors, status: :unprocessable_entity
-    # end
+      rescue ActiveRecord::RecordNotFound
+      render json: @property_user.errors, status: :unprocessable_entity
   end
 
   # DELETE /property_users/1
@@ -82,6 +79,8 @@ class PropertyUsersController < ApplicationController
     property.active = !property.active
     property.save
     render json: property
+    rescue ActiveRecord::RecordNotFound
+    render json: { error: "Propiedad no encontrada" }, status: :not_found
   end
 
   def my_properties
