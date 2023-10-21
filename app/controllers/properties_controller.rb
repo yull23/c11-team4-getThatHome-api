@@ -97,13 +97,6 @@ class PropertiesController < ApplicationController
   #   }
   # end
 
-  # def data_property_addres
-  #   {
-  #     name: params[:property_address][:name],
-  #     latitude: params[:property_address][:latitude],
-  #     longitude: params[:property_address][:longitude]
-  #   }
-  # end
 
   # def data_property_type
   #   {

@@ -45,19 +45,6 @@ class PropertyUsersController < ApplicationController
     render json: result
   end
 
-  def listland
-    User.where(role_id: 1)
-    @property_sale = PropertyForSale.all
-    render json: @property_sale
-  end
-
-  # GET /listhome
-  def listhome
-    User.where(role_id: 2)
-    @property_rent = PropertyForRent.all
-    render json: @property_rent
-  end
-
   # PATCH/PUT /property_users/1
   def update
     property_user= PropertyUser.find_by(user:current_user,property:set_property_user)
@@ -87,7 +74,6 @@ class PropertyUsersController < ApplicationController
     all_my_properties = Property.where(user_id:current_user.id).map do |property|
       property_view(property)
     end
-
     render json: all_my_properties
   end
 
