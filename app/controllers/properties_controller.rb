@@ -23,6 +23,7 @@ class PropertiesController < ApplicationController
 
   # POST /properties
   def create
+    authorize @property_user
     address = PropertyAddress.create(property_params[:property_address])
     type_property = PropertyType.find_by(name:params[:property_type][:name])
     @property=Property.new(user:current_user,property_type: type_property,property_address:address)
@@ -81,28 +82,6 @@ class PropertiesController < ApplicationController
       property_address: PropertyAddress.find_by(property: property_found)
     }
   end
-
-  # def data_property
-  #   {
-  #     operation: params[:property][:operation],
-  #     price: params[:property][:price],
-  #     maintenance: params[:property][:maintenance],
-  #     area: params[:property][:area],
-  #     description: params[:property][:description],
-  #     bedrooms: params[:property][:bedrooms],
-  #     bathrooms: params[:property][:bathrooms],
-  #     pets_allowed: params[:property][:pets_allowed],
-  #     photo_url: params[:property][:photo_url],
-  #     active: params[:property][:active]
-  #   }
-  # end
-
-
-  # def data_property_type
-  #   {
-  #     name: params[:property_type][:name]
-  #   }
-  # end
 
 def property_params
   params.permit(

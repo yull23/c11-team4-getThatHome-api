@@ -30,19 +30,27 @@ class PropertyUsersController < ApplicationController
     @favorites = PropertyUser.where(user: current_user, favorite: true)
     result = @favorites.map do |favorite|
       property_view(Property.find(favorite.property_id))
-    end
-
+      end
     Rails.logger.debug @favorites
-    render json: result
+    if result == nil
+      render json: result
+    else 
+      render json: { error: "No hay favoritos" }, status: :not_found
+    end
   end
 
   def listcontacts
+ 
     @contacted = PropertyUser.where(user: current_user, contacted: true)
     result = @contacted.map do |contact|
       property_view(Property.find(contact.property_id))
     end
     Rails.logger.debug @contacted
-    render json: result
+    if result == nil
+      render json: result
+    else 
+      render json: { error: "No hay Contactos" }, status: :not_found
+    end
   end
 
   # PATCH/PUT /property_users/1
@@ -50,7 +58,6 @@ class PropertyUsersController < ApplicationController
     property_user= PropertyUser.find_by(user:current_user,property:set_property_user)
     property_user.update(property_user_params)
     render json: property_user
-
       rescue ActiveRecord::RecordNotFound
       render json: @property_user.errors, status: :unprocessable_entity
   end

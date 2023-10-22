@@ -4,5 +4,10 @@ class PropertyPolicy < ApplicationPolicy
     # def resolve
     #   scope.all
     # end
+
+    def create?
+      user.rol_id == 1  # Permite crear propiedades solo a los propietarios
+  
+    end
   end
 end

@@ -7,12 +7,12 @@ PropertyAddress.destroy_all
 PropertyUser.destroy_all 
 puts "end destroying data ..."
 
-Role.create(name: 'Landord')
+Role.create(name: 'LandLord')
 Role.create(name: 'HomeSeeker')
 
 puts "End creating roles"
 # Primero, obtén las instancias de los roles
-admin_role = Role.find_by(name: 'Landord')
+admin_role = Role.find_by(name: 'LandLord')
 user_role = Role.find_by(name: 'HomeSeeker')
 
 # Crea usuarios con roles
@@ -85,7 +85,7 @@ urls = [
     bedrooms: rand(1...10),
     bathrooms: rand(1...5),
     pets_allowed: Faker::Boolean.boolean,
-    photo_url: urls.sample(2),
+    photo_url: urls.sample(3),
     active: Faker::Boolean.boolean,
   )
   unless property.persisted?
