@@ -32,7 +32,7 @@ class PropertyUsersController < ApplicationController
       property_view(Property.find(favorite.property_id))
       end
     Rails.logger.debug @favorites
-    if result == nil
+    if result != []
       render json: result
     else 
       render json: { error: "No hay favoritos" }, status: :not_found
@@ -46,7 +46,7 @@ class PropertyUsersController < ApplicationController
       property_view(Property.find(contact.property_id))
     end
     Rails.logger.debug @contacted
-    if result == nil
+    if result != []
       render json: result
     else 
       render json: { error: "No hay Contactos" }, status: :not_found
