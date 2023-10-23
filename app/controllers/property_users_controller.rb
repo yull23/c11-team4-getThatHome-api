@@ -17,9 +17,11 @@ class PropertyUsersController < ApplicationController
 
   # POST /property_users
   def create
+   
     @property_user = PropertyUser.new(property_user_params)
     @property_user.update(user_id:current_user.id)
     if @property_user.save
+  
       render json: @property_user, status: :created
     else
       render json: @property_user.errors, status: :unprocessable_entity
@@ -95,7 +97,9 @@ class PropertyUsersController < ApplicationController
   end
 
   def set_property_user
-    @property_user = PropertyUser.find(params[:id])
+      @property_user = PropertyUser.find(params[:id])
+      render json: { error: "Propiedad no encontrada" }, status: :not_found
+    
   end
 
   def property_user_params

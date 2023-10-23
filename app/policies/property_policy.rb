@@ -7,7 +7,7 @@ class PropertyPolicy < ApplicationPolicy
 
     def create?
       user.rol_id == 1  # Permite crear propiedades solo a los propietarios
-  
+     p user
     end
   end
 end

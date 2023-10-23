@@ -14,7 +14,6 @@ class PropertiesController < ApplicationController
   # GET /properties/1
   def show
     if @property
-
       render json: property_view(@property)
     else
       render json: { error: "Propiedad no encontrada" }, status: :not_found
@@ -23,7 +22,8 @@ class PropertiesController < ApplicationController
 
   # POST /properties
   def create
-    authorize @property_user
+    # authorize @property_user
+    return render json: { error: "Usuario no autorizado" },status: :unauthorized unless current_user.role_id == 1
     address = PropertyAddress.create(property_params[:property_address])
     type_property = PropertyType.find_by(name:params[:property_type][:name])
     @property=Property.new(user:current_user,property_type: type_property,property_address:address)
