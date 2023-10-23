@@ -34,6 +34,8 @@ class PropertiesController < ApplicationController
 
   def update
     @property = set_property
+    p current_user
+    p @property
     if current_user.id == @property.user_id
       address = PropertyAddress.find(@property.property_address_id) # Capturando la dirección
       if property_params[:property_type].present?
@@ -46,7 +48,7 @@ class PropertiesController < ApplicationController
       address.save
       render json: property_view(@property)
     else
-      render json: @property.errors, status: :unprocessable_entity
+      render json: { error: "Usuario no autorizado" }, status: :unprocessable_entity
     end
 
   end
