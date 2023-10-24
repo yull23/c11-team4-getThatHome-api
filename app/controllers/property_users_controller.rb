@@ -18,8 +18,9 @@ class PropertyUsersController < ApplicationController
   # POST /property_users
   def create
     @property_user = PropertyUser.new(property_user_params)
-    @property_user.update(user_id:current_user.id)
+    @property_user.update(user_id: current_user.id)
     if @property_user.save
+
       render json: @property_user, status: :created
     else
       render json: @property_user.errors, status: :unprocessable_entity
@@ -31,9 +32,12 @@ class PropertyUsersController < ApplicationController
     result = @favorites.map do |favorite|
       property_view(Property.find(favorite.property_id))
     end
-
     Rails.logger.debug @favorites
-    render json: result
+    if result == []
+      render json: { error: "No hay favoritos" }, status: :not_found
+    else
+      render json: result
+    end
   end
 
   def listcontacts
@@ -42,33 +46,20 @@ class PropertyUsersController < ApplicationController
       property_view(Property.find(contact.property_id))
     end
     Rails.logger.debug @contacted
-    render json: result
-  end
-
-  def listland
-    User.where(role_id: 1)
-    @property_sale = PropertyForSale.all
-    render json: @property_sale
-  end
-
-  # GET /listhome
-  def listhome
-    User.where(role_id: 2)
-    @property_rent = PropertyForRent.all
-    render json: @property_rent
+    if result == []
+      render json: { error: "No hay Contactos" }, status: :not_found
+    else
+      render json: result
+    end
   end
 
   # PATCH/PUT /property_users/1
   def update
-    property_user= PropertyUser.find_by(user:current_user,property:set_property_user)
+    property_user = PropertyUser.find_by(user: current_user, property: set_property_user)
     property_user.update(property_user_params)
     render json: property_user
-
-    # if @property_user.update(property_user_params)
-    #   render json: @property_user
-    # else
-    #   render json: @property_user.errors, status: :unprocessable_entity
-    # end
+  rescue ActiveRecord::RecordNotFound
+    render json: @property_user.errors, status: :unprocessable_entity
   end
 
   # DELETE /property_users/1
@@ -76,19 +67,19 @@ class PropertyUsersController < ApplicationController
     @property_user.destroy
   end
 
-
   def update_my_property
     property = Property.find(property_user_params[:property_id])
     property.active = !property.active
     property.save
     render json: property
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Propiedad no encontrada" }, status: :not_found
   end
 
   def my_properties
-    all_my_properties = Property.where(user_id:current_user.id).map do |property|
+    all_my_properties = Property.where(user_id: current_user.id).map do |property|
       property_view(property)
     end
-
     render json: all_my_properties
   end
 
@@ -104,6 +95,7 @@ class PropertyUsersController < ApplicationController
 
   def set_property_user
     @property_user = PropertyUser.find(params[:id])
+    render json: { error: "Propiedad no encontrada" }, status: :not_found
   end
 
   def property_user_params

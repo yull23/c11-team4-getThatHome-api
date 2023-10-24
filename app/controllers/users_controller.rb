@@ -10,6 +10,11 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
+    unless current_user.role_id == 1
+      return render json: { error: "Usuario no autorizado" },
+                    status: :unauthorized
+    end
+
     render json: User.find(params[:id])
   end
 
