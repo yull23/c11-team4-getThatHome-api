@@ -23,10 +23,15 @@ class PropertiesController < ApplicationController
   # POST /properties
   def create
     # authorize @property_user
-    return render json: { error: "Usuario no autorizado" },status: :unauthorized unless current_user.role_id == 1
+    unless current_user.role_id == 1
+      return render json: { error: "Usuario no autorizado" },
+                    status: :unauthorized
+    end
+
     address = PropertyAddress.create(property_params[:property_address])
-    type_property = PropertyType.find_by(name:params[:property_type][:name])
-    @property=Property.new(user:current_user,property_type: type_property,property_address:address)
+    type_property = PropertyType.find_by(name: params[:property_type][:name])
+    @property = Property.new(user: current_user, property_type: type_property,
+                             property_address: address)
     @property.update(property_params[:property])
     @property.save
     render json: property_view(@property)
@@ -34,7 +39,7 @@ class PropertiesController < ApplicationController
 
   def update
     @property = set_property
-    
+
     if current_user.id == @property.user_id
       address = PropertyAddress.find(@property.property_address_id) # Capturando la dirección
       if property_params[:property_type].present?
@@ -49,7 +54,6 @@ class PropertiesController < ApplicationController
     else
       render json: { error: "Usuario no autorizado" }, status: :unprocessable_entity
     end
-
   end
 
   def destroy
@@ -63,7 +67,7 @@ class PropertiesController < ApplicationController
 
   def listBestPrice
     @properties = Property.where(active: true, operation: "Rent")
-    properties_sorted = @properties.sort_by { |propertyView| propertyView.price }
+    properties_sorted = @properties.sort_by(&:price)
     best_property = properties_sorted[0, 3].map do |property_view_id|
       property_view(property_view_id)
     end
@@ -84,24 +88,25 @@ class PropertiesController < ApplicationController
     }
   end
 
-def property_params
-  params.permit(
-    :id,
-    property: [
-      :property_type_id,
-      :property_address_id,
-      :operation,
-      :price,
-      :maintenance,
-      :area,
-      :description,
-      :bedrooms,
-      :bathrooms,
-      :pets_allowed,
-      :active,
-      photo_url: []],
-    property_type: [:name],
-    property_address: %i[name latitude longitude]
-  )
+  def property_params
+    params.permit(
+      :id,
+      property: [
+        :property_type_id,
+        :property_address_id,
+        :operation,
+        :price,
+        :maintenance,
+        :area,
+        :description,
+        :bedrooms,
+        :bathrooms,
+        :pets_allowed,
+        :active,
+        { photo_url: [] }
+      ],
+      property_type: [:name],
+      property_address: %i[name latitude longitude]
+    )
   end
 end
