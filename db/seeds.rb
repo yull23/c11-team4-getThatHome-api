@@ -98,19 +98,29 @@ data = [
     "longitude" => -99.18826406767128
   },
   {
-    "name" => "Hotel Tacubaya",
-    "latitude" => 19.40019800959121,
-    "longitude" => -99.1876203373619
+    "name" => "Bellas Artes",
+    "latitude" => 19.435928780348842,
+    "longitude" => -99.1404127446987
   },
   {
-    "name" => "Hotel Principe",
-    "latitude" => 19.39941645399611,
-    "longitude" => -99.17373739541077
+    "name" => "Embajada",
+    "latitude" => 19.428387706258665,
+    "longitude" => -99.16589256833815
   },
   {
-    "name" => "Napoles Condo Suites",
-    "latitude" => 19.396897267764558,
-    "longitude" => -99.16788762427622
+    "name" => "IOS offices",
+    "latitude" => 19.427699025686692,
+    "longitude" => -99.16456232989225
+  },
+  {
+    "name" => "The Ritz-Carlton",
+    "latitude" => 19.424312745120712,
+    "longitude" => -99.17567723637313
+  },
+  {
+    "name" => "Four Seasons",
+    "latitude" => 19.4232747253661,
+    "longitude" =>  -99.1732232960489
   }
 ]
 data.each do |address_data|
