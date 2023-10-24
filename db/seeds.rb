@@ -136,7 +136,7 @@ puts 'End creating Property Addresses'
 # Properties
 puts "start creating Properties"
 urls = [
-  "https://picsum.photos/id/1054/640",
+  "https://picsum.photos/id/1040/630",
   "https://images.freeimages.com/images/large-previews/e85/house-1224030.jpg",
   "https://media.istockphoto.com/photos/new-housing-estate-with-underground-garage-picture-id1287012612?s=612x612",
   "https://images.freeimages.com/images/large-previews/d5b/home-1224274.jpg",
